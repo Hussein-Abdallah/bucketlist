@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm dev\""
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm dev\"",
+    "lint": "npm run lint:eslint",
+    "lint:eslint": "eslint ./**/*.js"
   },
   "author": "",
   "license": "ISC",
