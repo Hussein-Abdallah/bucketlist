@@ -1,17 +1,32 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+const express = require("express");
+const { graphqlHTTP } = require("express-graphql");
+const bodyParser = require("body-parser");
+require("dotenv").config();
+
+const schema = require("./graphql/schema");
+const connectDB = require("./config/database");
 
 const PORT = process.env.PORT || 5050;
 
-const app = express();
+const startServer = async () => {
+  const app = express();
 
-app.use(bodyParser.json());
+  await connectDB();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+  app.use(bodyParser.json());
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  app.use(
+    "/graphql",
+    bodyParser.json(),
+    graphqlHTTP({
+      schema,
+      graphiql: true,
+    })
+  );
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+};
+
+startServer();
