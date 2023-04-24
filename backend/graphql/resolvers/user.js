@@ -1,4 +1,4 @@
-const User = require("../../models/users");
+const {User} = require("../../models");
 const {dateToString} = require("../../utilities");
 
 const addUser = async (parent, args) => {
@@ -23,12 +23,22 @@ const removeUser = async (parent, args) => {
 
 const users = async () => {
   const usersList = await User.find();
-  return usersList;
+  return usersList.map((user) => {
+    return {
+      ...user._doc,
+      id: user._doc._id,
+      dateOfBirth: dateToString(user._doc.dateOfBirth),
+    };
+  });
 };
 
 const user = async (_, {id}) => {
-  const userItem = await User.findById(id);
-  return userItem;
+  const userDetails = await User.findById(id);
+  return {
+    ...userDetails._doc,
+    id: userDetails._doc._id,
+    dateOfBirth: dateToString(userDetails._doc.dateOfBirth),
+  };
 };
 
 module.exports = {Query: {users, user}, Mutation: {addUser, removeUser}};

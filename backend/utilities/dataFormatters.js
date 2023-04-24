@@ -1,5 +1,6 @@
-const User = require("../models/users");
-const {dateToString} = require("../utilities");
+const {User} = require("../models");
+
+const {dateToString} = require("./date");
 
 const transformUser = async (userId) => {
   const userDetails = await User.findById(userId);
@@ -8,7 +9,6 @@ const transformUser = async (userId) => {
     id: userDetails._doc._id,
     dateOfBirth: dateToString(userDetails._doc.dateOfBirth),
   };
-
 };
 
 const transformCategory = (category) => {
@@ -20,4 +20,3 @@ const transformCategory = (category) => {
 };
 
 module.exports = {transformUser, transformCategory};
-

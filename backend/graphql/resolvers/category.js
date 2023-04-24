@@ -1,4 +1,4 @@
-const Category = require("../../models/categories");
+const {Category} = require("../../models");
 const {transformCategory} = require("../../utilities");
 
 const categories = async (_, {userId}) => {

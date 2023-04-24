@@ -14,7 +14,7 @@ module.exports = `
     userId: ID!
   }
 
-  input UpdateCategoryInput {
+  input CategoryUpdateInput {
     title: String
     description: String
     image: String
@@ -27,7 +27,7 @@ module.exports = `
 
   type Mutation {
     addCategory(input: CategoryInput): Category
-    updateCategory(id: ID!, input: UpdateCategoryInput): Category
+    updateCategory(id: ID!, input: CategoryUpdateInput): Category
     removeCategory(id: ID!): Category
   }
 `;
