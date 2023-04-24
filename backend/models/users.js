@@ -1,4 +1,3 @@
-//User Model
 const mongoose = require("mongoose");
 const validator = require("validator");
 
@@ -39,14 +38,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  {timestamps: true},
 );
 
-UserSchema.post("save", function (error, doc, next) {
+UserSchema.post("save", (error, _, next) => {
   if (error.name === "MongoServerError" && error.code === 11000) {
-    next(new Error("Already user exists with this email!"));
+    return next(new Error("Already user exists with this email!"));
   } else {
-    next(error);
+    return next(error);
   }
 });
 

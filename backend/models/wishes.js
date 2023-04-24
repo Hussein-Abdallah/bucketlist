@@ -7,12 +7,12 @@ const wishSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    description: { type: String, required: true, trim: true },
-    image: { type: String },
+    description: {type: String, required: true, trim: true},
+    image: {type: String},
     // to be changed to the return value that will be used by google map api
-    location: { type: String, trim: true },
-    cost: { type: Number },
-    timeLine: { type: Date },
+    location: {type: String, trim: true},
+    cost: {type: Number},
+    timeLine: {type: Date},
     status: {
       type: String,
       enum: ["New", "Planning", "In progress", "Achieved"],
@@ -29,7 +29,7 @@ const wishSchema = new mongoose.Schema(
       ref: "Category",
     },
   },
-  { timestamps: true }
+  {timestamps: true},
 );
 
 module.exports = mongoose.model("Wish", wishSchema);

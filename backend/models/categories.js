@@ -7,15 +7,15 @@ const categorySchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    description: { type: String, required: false, trim: true },
-    image: { type: String, required: false, trim: true },
+    description: {type: String, required: false, trim: true},
+    image: {type: String, required: false, trim: true},
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
     },
   },
-  { timestamps: true }
+  {timestamps: true},
 );
 
 module.exports = mongoose.model("Category", categorySchema);

@@ -1,1 +1,3 @@
-exports.dateToString = (date) => new Date(date).toISOString();
+const dateToString = (date) => new Date(date).toISOString();
+
+module.exports = {dateToString};
