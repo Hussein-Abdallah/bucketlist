@@ -1,5 +1,5 @@
 const express = require("express");
-const { graphqlHTTP } = require("express-graphql");
+const {graphqlHTTP} = require("express-graphql");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
@@ -21,7 +21,7 @@ const startServer = async () => {
     graphqlHTTP({
       schema,
       graphiql: true,
-    })
+    }),
   );
 
   app.listen(PORT, () => {
