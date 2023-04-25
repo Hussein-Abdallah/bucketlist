@@ -6,6 +6,7 @@ module.exports = `
     email: String!
     dateOfBirth: String!
     password: String!
+    avatar: String
   }
 
   "input type for user"
@@ -14,6 +15,13 @@ module.exports = `
     email: String!
     dateOfBirth: String!
     password: String!
+  }
+
+  "input type for user update"
+  input UserUpdateInput {
+    name: String
+    email: String
+    dateOfBirth: String
   }
 
   "Auth data type"
@@ -31,7 +39,14 @@ module.exports = `
   type Mutation {
     "Add new user"
     createUser(input: NewUserInput!): AuthData!
-    "Remove user"
+
+    "Update user"
+    updateUser(input: UserUpdateInput!): User!
+
+    "Update user password"
+    updateUserPassword(password: String!): User!
+
+    "Delete user"
     deleteUser: User!
   }
 `;
