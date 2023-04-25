@@ -9,10 +9,9 @@ const wishSchema = new mongoose.Schema(
     },
     description: {type: String, trim: true},
     image: {type: String},
-    // to be changed to the return value that will be used by google map api
     location: {type: String, trim: true},
     cost: {type: Number},
-    timeline: {type: Date},
+    timeline: {type: Date, default: Date.now},
     status: {
       type: String,
       enum: ["New", "Planning", "In progress", "Achieved"],

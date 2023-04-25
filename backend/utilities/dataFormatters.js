@@ -1,8 +1,9 @@
 const {User} = require("../models");
+const {Category} = require("../models");
 
 const {dateToString} = require("./date");
 
-const transformUser = async (userId) => {
+const populateUser = async (userId) => {
   const userDetails = await User.findById(userId);
   return {
     ...userDetails._doc,
@@ -15,8 +16,28 @@ const transformCategory = (category) => {
   return {
     ...category._doc,
     id: category._doc._id,
-    user: transformUser(category.user),
+    user: populateUser(category.user),
   };
 };
 
-module.exports = {transformUser, transformCategory};
+const populateCategory = async (categoryId) => {
+  const categoryDetails = await Category.findById(categoryId);
+  return transformCategory(categoryDetails);
+};
+
+const transformWish = (wish) => {
+  return {
+    ...wish._doc,
+    id: wish._doc._id,
+    timeline: dateToString(wish._doc.timeline),
+    user: populateUser(wish._doc.user),
+    category: populateCategory(wish._doc.category),
+  };
+};
+
+module.exports = {
+  populateUser,
+  transformCategory,
+  populateCategory,
+  transformWish,
+};
