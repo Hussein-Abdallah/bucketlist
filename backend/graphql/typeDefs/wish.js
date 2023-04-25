@@ -13,6 +13,7 @@ module.exports = `
     description: String
     status: String!
     timeline: String
+    image: String
     cost: Float
     user: User!
     category: Category!

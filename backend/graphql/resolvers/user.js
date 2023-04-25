@@ -73,6 +73,7 @@ const updateUser = async (_, {input}, context) => {
       name: input.name,
       email: input.email,
       dateOfBirth: input.dateOfBirth,
+      avatar: input.avatar,
     },
     {new: true},
   );
@@ -128,5 +129,10 @@ const deleteUser = async (_parent, args, context) => {
 
 module.exports = {
   Query: {login},
-  Mutation: {createUser, updateUser, updateUserPassword, deleteUser},
+  Mutation: {
+    createUser,
+    updateUser,
+    updateUserPassword,
+    deleteUser,
+  },
 };
