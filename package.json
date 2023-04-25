@@ -14,9 +14,5 @@
     "@shopify/eslint-plugin": "^42.1.0",
     "concurrently": "^8.0.1",
     "eslint": "^8.38.0"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0"
   }
 }
