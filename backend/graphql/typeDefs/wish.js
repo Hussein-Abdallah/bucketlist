@@ -27,7 +27,6 @@ module.exports = `
     image: String
     timeline: String
     cost: Float
-    user: ID!
     category: ID!
   }
 
@@ -42,7 +41,7 @@ module.exports = `
   }
 
   type Query {
-    wishes(category: ID!, user: ID!): [Wish!]!
+    wishes(category: ID!): [Wish!]!
     wish(id: ID!): Wish!
   }
 

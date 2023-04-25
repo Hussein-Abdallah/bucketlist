@@ -11,7 +11,6 @@ module.exports = `
     title: String!
     description: String
     image: String
-    userId: ID!
   }
 
   input CategoryUpdateInput {
@@ -21,7 +20,7 @@ module.exports = `
   }
 
   type Query {
-    categories(userId: ID!): [Category]
+    categories: [Category!]!
     category(id: ID!): Category
   }
 

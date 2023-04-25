@@ -1,32 +1,49 @@
 const {Category} = require("../../models");
 const {transformCategory} = require("../../utilities");
 
-const categories = async (_, {userId}) => {
-  const categoriesList = await Category.find({user: userId});
+const categories = async (_source, _args, context) => {
+  if (!context.isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const categoriesList = await Category.find({user: context.userId});
   return categoriesList.map((category) => {
     return transformCategory(category);
   });
 };
 
-const category = async (_, {id}) => {
-  const categoryDetails = await Category.findById(id);
+const category = async (_source, {id}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const categoryDetails = await Category.findOne({_id: id, user: userId});
   return transformCategory(categoryDetails);
 };
 
-const addCategory = async (_, {input}) => {
+const addCategory = async (_source, {input}, context) => {
+  if (!context.isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
   const newCategory = new Category({
     title: input.title,
     description: input.description,
     image: input.image,
-    user: input.userId,
+    user: context.userId,
   });
   const result = await newCategory.save();
   return transformCategory(result);
 };
 
-const updateCategory = async (_, {id, input}) => {
-  const updatedCategory = await Category.findByIdAndUpdate(
-    id,
+const updateCategory = async (_, {id, input}, context) => {
+  if (!context.isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const updateCategory = await Category.findOneAndUpdate(
+    {_id: id, user: context.userId},
     {
       title: input.title,
       description: input.description,
@@ -35,11 +52,28 @@ const updateCategory = async (_, {id, input}) => {
     {new: true},
   );
 
-  return transformCategory(updatedCategory);
+  if (!updateCategory) {
+    throw new Error("Category not found");
+  }
+
+  return transformCategory(updateCategory);
 };
 
-const removeCategory = async (_, {id}) => {
-  const deletedCategory = await Category.findByIdAndRemove(id);
+const removeCategory = async (_source, {id}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthorized");
+  }
+
+  const deletedCategory = await Category.findOneAndDelete({
+    _id: id,
+    user: userId,
+  });
+
+  if (!deletedCategory) {
+    throw new Error("Category not found");
+  }
+
   return transformCategory(deletedCategory);
 };
 

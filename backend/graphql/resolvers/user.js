@@ -1,44 +1,77 @@
-const {User} = require("../../models");
-const {dateToString} = require("../../utilities");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const addUser = async (parent, args) => {
+const {User} = require("../../models");
+
+const createUser = async (_parent, args) => {
+  const existingUser = await User.findOne({email: args.input.email});
+
+  if (existingUser) {
+    throw new Error("User exists already.");
+  }
+
+  const hashedPassword = await bcrypt.hash(args.input.password, 12);
+
   const user = new User({
     name: args.input.name,
     email: args.input.email,
+    password: hashedPassword,
     dateOfBirth: args.input.dateOfBirth,
-    password: args.input.password,
   });
   const newUser = await user.save();
+
+  const token = jwt.sign(
+    {userId: newUser.id, email: newUser.email},
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: "1h",
+    },
+  );
+
   return {
-    ...newUser._doc,
-    id: newUser._doc._id,
-    dateOfBirth: dateToString(newUser._doc.dateOfBirth),
+    userId: newUser.id,
+    token,
+    tokenExpiration: 1,
   };
 };
 
-const removeUser = async (parent, args) => {
-  const deletedUser = await User.findByIdAndRemove(args.id);
+const deleteUser = async (_parent, args, context) => {
+  const {isAuthenticated, userId} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const deletedUser = await User.findByIdAndRemove(userId);
   return deletedUser;
 };
 
-const users = async () => {
-  const usersList = await User.find();
-  return usersList.map((user) => {
-    return {
-      ...user._doc,
-      id: user._doc._id,
-      dateOfBirth: dateToString(user._doc.dateOfBirth),
-    };
-  });
-};
+const login = async (_, {email, password}) => {
+  const user = await User.findOne({email});
+  if (!user) {
+    throw new Error("Credentials are incorrect!");
+  }
 
-const user = async (_, {id}) => {
-  const userDetails = await User.findById(id);
+  const isPasswordEqual = await bcrypt.compare(password, user.password);
+  if (!isPasswordEqual) {
+    throw new Error("pass are incorrect!");
+  }
+
+  const token = jwt.sign(
+    {userId: user.id, email: user.email},
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: "1h",
+    },
+  );
+
   return {
-    ...userDetails._doc,
-    id: userDetails._doc._id,
-    dateOfBirth: dateToString(userDetails._doc.dateOfBirth),
+    userId: user.id,
+    token,
+    tokenExpiration: 1,
   };
 };
 
-module.exports = {Query: {users, user}, Mutation: {addUser, removeUser}};
+module.exports = {
+  Query: {login},
+  Mutation: {createUser, deleteUser},
+};

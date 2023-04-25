@@ -1,19 +1,38 @@
 const {Wish} = require("../../models");
 const {transformWish} = require("../../utilities");
 
-const wish = async (_, {id}) => {
-  const wishDetails = await Wish.findById(id);
+const wish = async (_source, {id}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const wishDetails = await Wish.findOne({_id: id, user: userId});
+  if (!wishDetails) {
+    throw new Error("Wish not found");
+  }
+
   return transformWish(wishDetails);
 };
 
-const wishes = async (_, {category, user}) => {
-  const wishesList = await Wish.find({category, user});
+const wishes = async (_source, {category}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const wishesList = await Wish.find({category, user: userId});
   return wishesList.map((wishItem) => {
     return transformWish(wishItem);
   });
 };
 
-const createWish = async (_, {input}) => {
+const createWish = async (_source, {input}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
   const newWish = new Wish({
     title: input.title,
     location: input.location,
@@ -21,7 +40,7 @@ const createWish = async (_, {input}) => {
     image: input.image,
     timeline: input.timeline,
     cost: input.cost,
-    user: input.user,
+    user: userId,
     category: input.category,
   });
 
@@ -29,9 +48,14 @@ const createWish = async (_, {input}) => {
   return transformWish(result);
 };
 
-const updateWish = async (_, {id, input}) => {
-  const updatedWish = await Wish.findByIdAndUpdate(
-    id,
+const updateWish = async (_source, {id, input}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const updatedWish = await Wish.findOneAndUpdate(
+    {_id: id, user: userId},
     {
       title: input.title,
       location: input.location,
@@ -44,11 +68,25 @@ const updateWish = async (_, {id, input}) => {
     {new: true},
   );
 
+  if (!updatedWish) {
+    throw new Error("Wish not found");
+  }
+
   return transformWish(updatedWish);
 };
 
-const deleteWish = async (_, {id}) => {
-  const deletedWish = await Wish.findByIdAndRemove(id);
+const deleteWish = async (_source, {id}, context) => {
+  const {userId, isAuthenticated} = context;
+  if (!isAuthenticated) {
+    throw new Error("Unauthenticated");
+  }
+
+  const deletedWish = await Wish.findOneAndDelete({_id: id, user: userId});
+
+  if (!deletedWish) {
+    throw new Error("Wish not found");
+  }
+
   return transformWish(deletedWish);
 };
 

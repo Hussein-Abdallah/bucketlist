@@ -16,17 +16,22 @@ module.exports = `
     password: String!
   }
 
+  "Auth data type"
+  type AuthData {
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
+  }
+
   type Query {
-    "Get all users"
-    users: [User!]!
-    "Get user by id"
-    user(id: ID!): User!
+    "Login user"
+    login(email: String!, password: String!): AuthData!
   }
 
   type Mutation {
     "Add new user"
-    addUser(input: NewUserInput!): User!
-    "Remove user by id"
-    removeUser(id: ID!): User!
+    createUser(input: NewUserInput!): AuthData!
+    "Remove user"
+    deleteUser: User!
   }
 `;

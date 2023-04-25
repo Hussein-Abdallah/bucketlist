@@ -9,5 +9,6 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": 0,
+    "no-shadow": "off",
   },
 };

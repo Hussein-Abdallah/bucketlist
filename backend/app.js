@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const schema = require("./graphql/schema");
 const connectDB = require("./config/database");
+const {isAuth} = require("./middleware");
 
 const PORT = process.env.PORT || 5050;
 
@@ -14,10 +15,10 @@ const startServer = async () => {
   await connectDB();
 
   app.use(bodyParser.json());
+  app.use(isAuth);
 
   app.use(
     "/graphql",
-    bodyParser.json(),
     graphqlHTTP({
       schema,
       graphiql: true,
