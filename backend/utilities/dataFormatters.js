@@ -1,4 +1,4 @@
-const {User} = require("../models");
+const {User, Wish} = require("../models");
 const {Category} = require("../models");
 
 const {dateToString} = require("./date");
@@ -13,10 +13,12 @@ const populateUser = async (userId) => {
 };
 
 const transformCategory = (category) => {
+  const wishCount = Wish.countDocuments({category: category._doc._id});
   return {
     ...category._doc,
     id: category._doc._id,
     user: populateUser(category.user),
+    wishCount,
   };
 };
 

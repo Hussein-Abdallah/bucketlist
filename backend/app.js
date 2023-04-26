@@ -9,25 +9,25 @@ const {isAuth} = require("./middleware");
 
 const PORT = process.env.PORT || 5050;
 
-const startServer = async () => {
-  const app = express();
+const app = express();
 
-  await connectDB();
+connectDB();
 
-  app.use(bodyParser.json());
-  app.use(isAuth);
+app.use(bodyParser.json());
+app.use(isAuth);
 
-  app.use(
-    "/graphql",
-    graphqlHTTP({
-      schema,
-      graphiql: true,
-    }),
-  );
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  }),
+);
 
+try {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-};
-
-startServer();
+} catch (error) {
+  console.log(error);
+}
