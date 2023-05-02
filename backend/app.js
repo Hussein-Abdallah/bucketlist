@@ -1,6 +1,7 @@
 const express = require('express');
 const {graphqlHTTP} = require('express-graphql');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -14,12 +15,19 @@ const app = express();
 
 await connectDB();
 
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+    headers: 'Content-Type, Authorization',
+    methods: 'POST,GET,OPTIONS',
+    optionsSuccessStatus: 200,
+  }),
+);
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
