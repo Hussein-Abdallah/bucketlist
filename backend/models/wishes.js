@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const wishSchema = new mongoose.Schema(
   {
@@ -14,21 +14,21 @@ const wishSchema = new mongoose.Schema(
     timeline: {type: Date, default: Date.now},
     status: {
       type: String,
-      enum: ["New", "Planning", "In progress", "Achieved"],
-      default: "New",
+      enum: ['New', 'Planning', 'In progress', 'Achieved'],
+      default: 'New',
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "Category",
+      ref: 'Category',
     },
   },
   {timestamps: true},
 );
 
-module.exports = mongoose.model("Wish", wishSchema);
+module.exports = mongoose.model('Wish', wishSchema);

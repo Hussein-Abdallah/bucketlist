@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error("Email is invalid!");
+          throw new Error('Email is invalid!');
         }
       },
     },
@@ -24,8 +24,8 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       minlength: 7,
       validate(value) {
-        if (validator.contains(value, "password")) {
-          throw new Error("Password can not contain password");
+        if (validator.contains(value, 'password')) {
+          throw new Error('Password can not contain password');
         }
       },
     },
@@ -40,12 +40,12 @@ const UserSchema = new mongoose.Schema(
   {timestamps: true},
 );
 
-UserSchema.post("save", (error, _, next) => {
-  if (error.name === "MongoServerError" && error.code === 11000) {
-    return next(new Error("Already user exists with this email!"));
+UserSchema.post('save', (error, _, next) => {
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    return next(new Error('Already user exists with this email!'));
   } else {
     return next(error);
   }
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);

@@ -1,24 +1,24 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const {User} = require("../../models");
+const {User} = require('../../models');
 
 const login = async (_, {email, password}) => {
   const user = await User.findOne({email});
   if (!user) {
-    throw new Error("Credentials are incorrect!");
+    throw new Error('Credentials are incorrect!');
   }
 
   const isPasswordEqual = await bcrypt.compare(password, user.password);
   if (!isPasswordEqual) {
-    throw new Error("pass are incorrect!");
+    throw new Error('pass are incorrect!');
   }
 
   const token = jwt.sign(
     {userId: user.id, email: user.email},
     process.env.JWT_SECRET_KEY,
     {
-      expiresIn: "1h",
+      expiresIn: '1h',
     },
   );
 
@@ -33,7 +33,7 @@ const createUser = async (_parent, args) => {
   const existingUser = await User.findOne({email: args.input.email});
 
   if (existingUser) {
-    throw new Error("User exists already.");
+    throw new Error('User exists already.');
   }
 
   const hashedPassword = await bcrypt.hash(args.input.password, 12);
@@ -50,7 +50,7 @@ const createUser = async (_parent, args) => {
     {userId: newUser.id, email: newUser.email},
     process.env.JWT_SECRET_KEY,
     {
-      expiresIn: "1h",
+      expiresIn: '1h',
     },
   );
 
@@ -64,7 +64,7 @@ const createUser = async (_parent, args) => {
 const updateUser = async (_, {input}, context) => {
   const {isAuthenticated, userId} = context;
   if (!isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
 
   const updatedUser = await User.findOneAndUpdate(
@@ -79,7 +79,7 @@ const updateUser = async (_, {input}, context) => {
   );
 
   if (!updatedUser) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   return updatedUser;
@@ -88,17 +88,17 @@ const updateUser = async (_, {input}, context) => {
 const updateUserPassword = async (_, {password}, context) => {
   const {isAuthenticated, userId} = context;
   if (!isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
 
   const user = await User.findOne({_id: userId});
   if (!user) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   const isPasswordEqual = await bcrypt.compare(password, user._doc.password);
   if (isPasswordEqual) {
-    throw new Error("New password must be different from old password");
+    throw new Error('New password must be different from old password');
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -109,19 +109,19 @@ const updateUserPassword = async (_, {password}, context) => {
     const updatedUser = await user.save();
     return updatedUser;
   } catch (error) {
-    throw new Error("Something went wrong updating password");
+    throw new Error('Something went wrong updating password');
   }
 };
 
 const deleteUser = async (_parent, args, context) => {
   const {isAuthenticated, userId} = context;
   if (!isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
   const deletedUser = await User.findByIdAndRemove(userId);
 
   if (!deletedUser) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   return deletedUser;

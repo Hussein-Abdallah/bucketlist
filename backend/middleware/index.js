@@ -1,4 +1,4 @@
-const isAuth = require("./isAuth");
+const isAuth = require('./isAuth');
 
 module.exports = {
   isAuth,

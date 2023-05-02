@@ -1,9 +1,9 @@
-const {Category} = require("../../models");
-const {transformCategory} = require("../../utilities");
+const {Category} = require('../../models');
+const {transformCategory} = require('../../utilities');
 
 const categories = async (_source, _args, context) => {
   if (!context.isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
 
   const categoriesList = await Category.find({user: context.userId});
@@ -15,7 +15,7 @@ const categories = async (_source, _args, context) => {
 const category = async (_source, {id}, context) => {
   const {userId, isAuthenticated} = context;
   if (!isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
 
   const categoryDetails = await Category.findOne({_id: id, user: userId});
@@ -24,7 +24,7 @@ const category = async (_source, {id}, context) => {
 
 const addCategory = async (_source, {input}, context) => {
   if (!context.isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
 
   const newCategory = new Category({
@@ -39,7 +39,7 @@ const addCategory = async (_source, {input}, context) => {
 
 const updateCategory = async (_, {id, input}, context) => {
   if (!context.isAuthenticated) {
-    throw new Error("Unauthenticated");
+    throw new Error('Unauthenticated');
   }
 
   const updateCategory = await Category.findOneAndUpdate(
@@ -53,7 +53,7 @@ const updateCategory = async (_, {id, input}, context) => {
   );
 
   if (!updateCategory) {
-    throw new Error("Category not found");
+    throw new Error('Category not found');
   }
 
   return transformCategory(updateCategory);
@@ -62,7 +62,7 @@ const updateCategory = async (_, {id, input}, context) => {
 const removeCategory = async (_source, {id}, context) => {
   const {userId, isAuthenticated} = context;
   if (!isAuthenticated) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
 
   const deletedCategory = await Category.findOneAndDelete({
@@ -71,7 +71,7 @@ const removeCategory = async (_source, {id}, context) => {
   });
 
   if (!deletedCategory) {
-    throw new Error("Category not found");
+    throw new Error('Category not found');
   }
 
   return transformCategory(deletedCategory);

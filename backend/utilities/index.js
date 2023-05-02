@@ -1,10 +1,10 @@
-const {dateToString} = require("./date");
+const {dateToString} = require('./date');
 const {
   transformCategory,
   populateUser,
   populateCategory,
   transformWish,
-} = require("./dataFormatters");
+} = require('./dataFormatters');
 
 module.exports = {
   dateToString,

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
     "lint": "npm run lint:eslint",
-    "lint:eslint": "eslint --ext .js,.jsx,.ts,.tsx ."
+    "lint:eslint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "fix:prettier": "prettier . --write"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "@shopify/eslint-plugin": "^42.1.0",
     "@shopify/prettier-config": "^1.1.2",
     "concurrently": "^8.0.1",
-    "eslint": "^8.38.0"
+    "eslint": "^8.38.0",
+    "prettier": "^2.8.8"
   }
 }

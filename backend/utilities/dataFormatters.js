@@ -1,7 +1,7 @@
-const {User, Wish} = require("../models");
-const {Category} = require("../models");
+const {User, Wish} = require('../models');
+const {Category} = require('../models');
 
-const {dateToString} = require("./date");
+const {dateToString} = require('./date');
 
 const populateUser = async (userId) => {
   const userDetails = await User.findById(userId);

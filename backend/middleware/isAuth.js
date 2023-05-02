@@ -1,16 +1,16 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 module.exports = (req, _res, next) => {
-  const authHeader = req.get("Authorization");
+  const authHeader = req.get('Authorization');
 
   if (!authHeader) {
     req.isAuthenticated = false;
     return next();
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.split(' ')[1];
 
-  if (!token || token === "") {
+  if (!token || token === '') {
     req.isAuthenticated = false;
     return next();
   }
