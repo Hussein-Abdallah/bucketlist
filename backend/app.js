@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5050;
 
 const app = express();
 
-await connectDB();
+connectDB();
 
 app.use(
   cors({
