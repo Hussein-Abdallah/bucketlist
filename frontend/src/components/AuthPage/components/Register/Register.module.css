@@ -1,0 +1,5 @@
+.Container {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(0.2rem);
+  transition-duration: 0.5s;
+}

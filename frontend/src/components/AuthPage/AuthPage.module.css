@@ -1,0 +1,12 @@
+.HeroContainer {
+  background-image: url('../../../public/assets/images/hero-image.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  transition: background-image 0.5s ease-in-out;
+
+  @media (max-width: 768px) {
+    background-image: url('../../../public/assets/images/bucket-list-ideas_orig.jpg');
+  }
+}
