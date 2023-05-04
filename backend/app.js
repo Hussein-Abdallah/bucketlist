@@ -1,6 +1,7 @@
 const express = require('express');
 const {graphqlHTTP} = require('express-graphql');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 require('dotenv').config();
@@ -26,6 +27,7 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {

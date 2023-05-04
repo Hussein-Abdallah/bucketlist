@@ -6,13 +6,18 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import {AuthPage, IndexPage, NotFoundPage} from './components';
+import {AppContext} from './foundation';
 
 export function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
         path="/"
-        element={<Outlet />}
+        element={
+          <AppContext>
+            <Outlet />
+          </AppContext>
+        }
         ErrorBoundary={(error) => <div>Error: {error.message}</div>}
       >
         <Route index path="/" element={<AuthPage />} />
