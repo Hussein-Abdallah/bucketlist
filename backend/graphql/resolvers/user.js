@@ -18,14 +18,14 @@ const login = async (_, {email, password}) => {
     {userId: user.id, email: user.email},
     process.env.JWT_SECRET_KEY,
     {
-      expiresIn: '1h',
+      expiresIn: '30d',
     },
   );
 
   return {
     userId: user.id,
     token,
-    tokenExpiration: 1,
+    tokenExpiration: 30,
   };
 };
 

@@ -1,14 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, _res, next) => {
-  const authHeader = req.get('Authorization');
-
-  if (!authHeader) {
-    req.isAuthenticated = false;
-    return next();
-  }
-
-  const token = authHeader.split(' ')[1];
+  const token = req.cookies.token;
 
   if (!token || token === '') {
     req.isAuthenticated = false;

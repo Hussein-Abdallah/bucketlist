@@ -8,7 +8,6 @@ import styles from './AuthPage.module.css';
 
 export function AuthPage() {
   const [isNewUser, setIsNewUser] = useState(false);
-  console.log(isNewUser);
 
   return (
     <div className={classNames('w-100', styles.HeroContainer)}>

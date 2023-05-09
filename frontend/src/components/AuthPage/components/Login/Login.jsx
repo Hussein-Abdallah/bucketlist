@@ -1,17 +1,44 @@
+import {useRef} from 'react';
 import {Form, Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
+import {useLazyQuery} from '@apollo/client';
+import {useCookies} from 'react-cookie';
 
+import {LOGIN_USER} from './graphql/loginQuery';
 import styles from './Login.module.css';
 
 export const Login = ({isNewUser, setIsNewUser}) => {
+  const [, setCookie] = useCookies(['token']);
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  const [loginUser] = useLazyQuery(LOGIN_USER, {
+    onCompleted: (data) => {
+      setCookie('token', data.login.token, {
+        path: '/',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      });
+    },
+  });
+
   function handleSubmit(event) {
     event.preventDefault();
 
-    console.log({
-      username: event.target[0].value,
-      password: event.target[1].value,
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+
+    if (email.trim().length === 0 || password.trim().length === 0) {
+      return;
+    }
+
+    loginUser({
+      variables: {
+        email,
+        password,
+      },
     });
   }
+
   return (
     <Fade in={!isNewUser} timeout={5000} appear>
       <div
@@ -30,12 +57,20 @@ export const Login = ({isNewUser, setIsNewUser}) => {
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="loginEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Control
+                ref={emailRef}
+                type="email"
+                placeholder="Enter email"
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="loginPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter password" />
+              <Form.Control
+                ref={passwordRef}
+                type="password"
+                placeholder="Enter password"
+              />
             </Form.Group>
 
             <Button className="w-100 mt-3" variant="primary" type="submit">
