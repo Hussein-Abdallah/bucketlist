@@ -5,7 +5,7 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import {AuthPage, IndexPage, NotFoundPage} from './components';
+import {AuthPage, IndexPage, NotFoundPage, ProtectedRoute} from './components';
 import {AppContext} from './foundation';
 
 export function App() {
@@ -20,9 +20,17 @@ export function App() {
         }
         ErrorBoundary={(error) => <div>Error: {error.message}</div>}
       >
-        <Route index path="/" element={<AuthPage />} />
+        <Route
+          index
+          path="/"
+          element={
+            <ProtectedRoute>
+              <IndexPage />
+            </ProtectedRoute>
+          }
+        />
         {/* TODO: Replace the index Route with the dashboard page */}
-        <Route path="/dashboard" element={<IndexPage />} />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>,
     ),

@@ -6,14 +6,19 @@ import {useCookies} from 'react-cookie';
 
 import {LOGIN_USER} from './graphql/loginQuery';
 import styles from './Login.module.css';
+import {useAuth} from '../../../../foundation';
+import {useNavigate} from 'react-router-dom';
 
 export const Login = ({isNewUser, setIsNewUser}) => {
   const [, setCookie] = useCookies(['token']);
+  const {setIsAuthenticated} = useAuth();
+  const {navigate} = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const [loginUser] = useLazyQuery(LOGIN_USER, {
+  const [loginUser, {data}] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
+      setIsAuthenticated(true);
       setCookie('token', data.login.token, {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30,
@@ -37,6 +42,17 @@ export const Login = ({isNewUser, setIsNewUser}) => {
         password,
       },
     });
+
+    //TODO : handle server errors
+
+    if (data) {
+      navigate('/');
+    }
+
+    emailRef.current.value = '';
+    passwordRef.current.value = '';
+
+    return;
   }
 
   return (
