@@ -3,27 +3,30 @@ import {Form, Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
 import {useLazyQuery} from '@apollo/client';
 import {useCookies} from 'react-cookie';
+import {loader} from 'graphql.macro';
+import {useNavigate} from 'react-router-dom';
 
-import {LOGIN_USER} from './graphql/loginQuery';
 import styles from './Login.module.css';
 import {useAuth} from '../../../../foundation';
-import {useNavigate} from 'react-router-dom';
+const LoginUser = loader('./graphql/login.graphql');
 
 export const Login = ({isNewUser, setIsNewUser}) => {
   const [, setCookie] = useCookies(['token']);
   const {setIsAuthenticated} = useAuth();
-  const {navigate} = useNavigate();
+  const navigate = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const [loginUser, {data}] = useLazyQuery(LOGIN_USER, {
+  const [loginUser] = useLazyQuery(LoginUser, {
     onCompleted: (data) => {
       setIsAuthenticated(true);
       setCookie('token', data.login.token, {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30,
       });
+      navigate('/');
     },
+    onError: (error) => console.log(error.networkError.result.errors),
   });
 
   function handleSubmit(event) {
@@ -43,11 +46,7 @@ export const Login = ({isNewUser, setIsNewUser}) => {
       },
     });
 
-    //TODO : handle server errors
-
-    if (data) {
-      navigate('/');
-    }
+    //TODO : handle graphql errors
 
     emailRef.current.value = '';
     passwordRef.current.value = '';

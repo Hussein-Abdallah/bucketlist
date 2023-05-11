@@ -1,16 +1,62 @@
+import {useState} from 'react';
 import {Form, Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
+import {loader} from 'graphql.macro';
+import {useMutation} from '@apollo/client';
+import {useNavigate} from 'react-router-dom';
+import {useCookies} from 'react-cookie';
 
 import styles from './Register.module.css';
+import {useAuth} from '../../../../foundation';
+const CREATE_USER = loader('./graphql/createUser.graphql');
 
 export const Register = ({isNewUser, setIsNewUser}) => {
+  const [userDetails, setUserDetails] = useState({
+    name: '',
+    email: '',
+    password: '',
+    dateOfBirth: '',
+  });
+  const [, setCookie] = useCookies(['token']);
+  const {setIsAuthenticated} = useAuth();
+  const navigate = useNavigate();
+
+  //createUser mutation
+  const [createUser] = useMutation(CREATE_USER, {
+    variables: {
+      input: {
+        name: userDetails.name,
+        email: userDetails.email,
+        password: userDetails.password,
+        dateOfBirth: userDetails.dateOfBirth,
+      },
+    },
+    onCompleted: (data) => {
+      setIsAuthenticated(true);
+      setCookie('token', data.login.token, {
+        path: '/',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      });
+      navigate('/');
+    },
+    onError: (error) => {
+      console.log(error);
+      console.log(error.networkError.result.errors);
+    },
+  });
+
+  function handleInputChange(event) {
+    const {name, value} = event.target;
+
+    setUserDetails((prevUserDetails) => ({
+      ...prevUserDetails,
+      [name]: value,
+    }));
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
-
-    console.log({
-      username: event.target[0].value,
-      password: event.target[1].value,
-    });
+    createUser();
   }
   return (
     <Fade in={isNewUser} timeout={50000} appear>
@@ -30,22 +76,45 @@ export const Register = ({isNewUser, setIsNewUser}) => {
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="registerName">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter Name" />
+              <Form.Control
+                type="text"
+                name="name"
+                placeholder="Enter Name"
+                value={userDetails.name}
+                onChange={handleInputChange}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="registerEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Control
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                value={userDetails.email}
+                onChange={handleInputChange}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="registerPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter password" />
+              <Form.Control
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                value={userDetails.password}
+                onChange={handleInputChange}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="registerDate">
               <Form.Label>Date of birth</Form.Label>
-              <Form.Control type="date" />
+              <Form.Control
+                type="date"
+                name="dateOfBirth"
+                value={userDetails.dateOfBirth}
+                onChange={handleInputChange}
+              />
             </Form.Group>
 
             <Button className="w-100 mt-3" variant="primary" type="submit">

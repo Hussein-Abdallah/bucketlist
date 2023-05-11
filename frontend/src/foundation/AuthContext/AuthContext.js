@@ -8,7 +8,7 @@ export const AuthProvider = ({children}) => {
   const [cookies] = useCookies(['token']);
   const {token} = cookies;
   const [isAuthenticated, setIsAuthenticated] = useState(token ? true : false);
-  console.log('isAuthenticated AuthContext', isAuthenticated);
+
   // TODO: check if token is valid in backend
 
   return (

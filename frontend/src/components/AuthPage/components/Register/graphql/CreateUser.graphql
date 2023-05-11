@@ -1,0 +1,8 @@
+# create user mutation
+mutation ($input: NewUserInput!) {
+  createUser(input: $input) {
+    token
+    userId
+    tokenExpiration
+  }
+}
