@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import {Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
 import {useLazyQuery} from '@apollo/client';
@@ -10,9 +10,11 @@ import styles from './Login.module.css';
 import {useAuth} from '../../../../foundation';
 import {AppForm, FormField, SubmitButton} from '../../../Shared';
 import {validationSchema} from './utilities';
+
 const LoginUser = loader('./graphql/login.graphql');
 
 export const Login = ({isNewUser, setIsNewUser}) => {
+  const formikRef = useRef();
   const [error, setError] = useState(null);
   const [, setCookie] = useCookies(['token']);
   const {setIsAuthenticated} = useAuth();
@@ -43,6 +45,12 @@ export const Login = ({isNewUser, setIsNewUser}) => {
     setError(error);
   }
 
+  const navigateToRegister = () => {
+    console.log('formikRef', formikRef);
+    formikRef.current?.resetForm();
+    setIsNewUser(true);
+  };
+
   return (
     <Fade in={!isNewUser} timeout={5000} appear>
       <div
@@ -65,6 +73,7 @@ export const Login = ({isNewUser, setIsNewUser}) => {
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
+            innerRef={formikRef}
           >
             <FormField
               name="email"
@@ -76,7 +85,7 @@ export const Login = ({isNewUser, setIsNewUser}) => {
               name="password"
               label="Password"
               type="password"
-              placeholder="Enter email"
+              placeholder="Enter password"
             />
             <SubmitButton
               title="Login"
@@ -101,7 +110,7 @@ export const Login = ({isNewUser, setIsNewUser}) => {
               className="fw-semibold"
               type="button"
               variant="link"
-              onClick={() => setIsNewUser(true)}
+              onClick={navigateToRegister}
             >
               Register
             </Button>
