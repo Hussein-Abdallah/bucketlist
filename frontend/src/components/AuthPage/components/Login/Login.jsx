@@ -1,5 +1,5 @@
-import {useRef} from 'react';
-import {Form, Button, Fade} from 'react-bootstrap';
+import {useState} from 'react';
+import {Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
 import {useLazyQuery} from '@apollo/client';
 import {useCookies} from 'react-cookie';
@@ -8,14 +8,15 @@ import {useNavigate} from 'react-router-dom';
 
 import styles from './Login.module.css';
 import {useAuth} from '../../../../foundation';
+import {AppForm, FormField, SubmitButton} from '../../../Shared';
+import {validationSchema} from './utilities';
 const LoginUser = loader('./graphql/login.graphql');
 
 export const Login = ({isNewUser, setIsNewUser}) => {
+  const [error, setError] = useState(null);
   const [, setCookie] = useCookies(['token']);
   const {setIsAuthenticated} = useAuth();
   const navigate = useNavigate();
-  const emailRef = useRef();
-  const passwordRef = useRef();
 
   const [loginUser] = useLazyQuery(LoginUser, {
     onCompleted: (data) => {
@@ -29,17 +30,9 @@ export const Login = ({isNewUser, setIsNewUser}) => {
     onError: (error) => console.log(error.networkError.result.errors),
   });
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-
-    if (email.trim().length === 0 || password.trim().length === 0) {
-      return;
-    }
-
-    loginUser({
+  async function handleSubmit({email, password}) {
+    setError(null);
+    const {error} = await loginUser({
       variables: {
         email,
         password,
@@ -47,11 +40,7 @@ export const Login = ({isNewUser, setIsNewUser}) => {
     });
 
     //TODO : handle graphql errors
-
-    emailRef.current.value = '';
-    passwordRef.current.value = '';
-
-    return;
+    setError(error);
   }
 
   return (
@@ -68,30 +57,42 @@ export const Login = ({isNewUser, setIsNewUser}) => {
             Bucket List App
           </h1>
         </div>
-        <div className="mb-5">
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="loginEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                ref={emailRef}
-                type="email"
-                placeholder="Enter email"
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="loginPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                ref={passwordRef}
-                type="password"
-                placeholder="Enter password"
-              />
-            </Form.Group>
-
-            <Button className="w-100 mt-3" variant="primary" type="submit">
-              Login
-            </Button>
-          </Form>
+        <div className="mb-3">
+          <AppForm
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <FormField
+              name="email"
+              label="Email"
+              type="email"
+              placeholder="Enter email"
+            />
+            <FormField
+              name="password"
+              label="Password"
+              type="password"
+              placeholder="Enter email"
+            />
+            <SubmitButton
+              title="Login"
+              className="w-100 mt-3"
+              variant="primary"
+              type="submit"
+            />
+          </AppForm>
+          {/* Replace with a toast for server errors */}
+          {error && (
+            <div className="d-flex justify-content-center align-items-center mt-3">
+              <p className="text-center text-danger mb-0">
+                {error && error.networkError.result.errors[0].message}
+              </p>
+            </div>
+          )}
         </div>
         <div>
           <p className="d-flex align-items-center justify-content-center w-100">

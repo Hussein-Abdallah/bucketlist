@@ -4,6 +4,7 @@
   background-position: center;
   background-repeat: no-repeat;
   transition: background-image 0.5s ease-in-out;
+  height: 100vh;
 
   @media (max-width: 768px) {
     background-image: url('../../../public/assets/images/bucket-list-ideas_orig.jpg');
