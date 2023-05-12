@@ -33,7 +33,7 @@ export const Register = ({isNewUser, setIsNewUser}) => {
     },
     onCompleted: (data) => {
       setIsAuthenticated(true);
-      setCookie('token', data.login.token, {
+      setCookie('token', data.createUser.token, {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30,
       });
@@ -41,7 +41,7 @@ export const Register = ({isNewUser, setIsNewUser}) => {
     },
     onError: (error) => {
       console.log(error);
-      console.log(error.networkError.result.errors);
+      console.log(error.networkError.result.errors[0].message);
     },
   });
 
@@ -54,9 +54,9 @@ export const Register = ({isNewUser, setIsNewUser}) => {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    createUser();
+    await createUser();
   }
   return (
     <Fade in={isNewUser} timeout={50000} appear>
@@ -114,6 +114,7 @@ export const Register = ({isNewUser, setIsNewUser}) => {
                 name="dateOfBirth"
                 value={userDetails.dateOfBirth}
                 onChange={handleInputChange}
+                max={new Date().toISOString().slice(0, 10)}
               />
             </Form.Group>
 
