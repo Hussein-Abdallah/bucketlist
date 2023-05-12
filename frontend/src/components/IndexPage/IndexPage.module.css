@@ -1,0 +1,17 @@
+.Container {
+  height: 100vh;
+  background-image: url('../../../public/assets/images/adventure-daylight-wallpaper.jpg');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.Container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
