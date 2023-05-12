@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {Form, Button, Fade} from 'react-bootstrap';
+import {useState, useRef} from 'react';
+import {Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
 import {loader} from 'graphql.macro';
 import {useMutation} from '@apollo/client';
@@ -8,31 +8,19 @@ import {useCookies} from 'react-cookie';
 
 import styles from './Register.module.css';
 import {useAuth} from '../../../../foundation';
+import {AppForm, FormField, SubmitButton} from '../../../Shared';
+const {validationSchema} = require('./utilities');
 const CREATE_USER = loader('./graphql/createUser.graphql');
 
 export const Register = ({isNewUser, setIsNewUser}) => {
-  const [userDetails, setUserDetails] = useState({
-    name: '',
-    email: '',
-    password: '',
-    dateOfBirth: '',
-  });
+  const [error, setError] = useState(null);
   const [, setCookie] = useCookies(['token']);
   const {setIsAuthenticated} = useAuth();
   const navigate = useNavigate();
+  const registerFormikRef = useRef();
 
-  //createUser mutation
   const [createUser] = useMutation(CREATE_USER, {
-    variables: {
-      input: {
-        name: userDetails.name,
-        email: userDetails.email,
-        password: userDetails.password,
-        dateOfBirth: userDetails.dateOfBirth,
-      },
-    },
     onCompleted: (data) => {
-      console.log(data);
       setIsAuthenticated(true);
       setCookie('token', data.createUser.token, {
         path: '/',
@@ -41,24 +29,29 @@ export const Register = ({isNewUser, setIsNewUser}) => {
       navigate('/');
     },
     onError: (error) => {
-      console.log(error);
-      console.log(error.networkError.result.errors[0].message);
+      setError(error);
     },
   });
 
-  function handleInputChange(event) {
-    const {name, value} = event.target;
-
-    setUserDetails((prevUserDetails) => ({
-      ...prevUserDetails,
-      [name]: value,
-    }));
+  async function handleSubmit({name, email, password, dateOfBirth}) {
+    await createUser({
+      variables: {
+        input: {
+          name: name,
+          email: email,
+          password: password,
+          dateOfBirth: dateOfBirth,
+        },
+      },
+    });
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    await createUser();
+  function navigateToLogin() {
+    setError(null);
+    registerFormikRef.current.resetForm();
+    setIsNewUser(false);
   }
+
   return (
     <Fade in={isNewUser} timeout={50000} appear>
       <div
@@ -74,55 +67,57 @@ export const Register = ({isNewUser, setIsNewUser}) => {
           </h1>
         </div>
         <div className="mb-5">
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="registerName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                placeholder="Enter Name"
-                value={userDetails.name}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="registerEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="Enter email"
-                value={userDetails.email}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="registerPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder="Enter password"
-                value={userDetails.password}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="registerDate">
-              <Form.Label>Date of birth</Form.Label>
-              <Form.Control
-                type="date"
-                name="dateOfBirth"
-                value={userDetails.dateOfBirth}
-                onChange={handleInputChange}
-                max={new Date().toISOString().slice(0, 10)}
-              />
-            </Form.Group>
-
-            <Button className="w-100 mt-3" variant="primary" type="submit">
-              Register
-            </Button>
-          </Form>
+          <AppForm
+            initialValues={{
+              name: '',
+              email: '',
+              password: '',
+              dateOfBirth: '',
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            innerRef={registerFormikRef}
+          >
+            <FormField
+              name="name"
+              type="text"
+              placeholder="Enter Name"
+              label="Name"
+            />
+            <FormField
+              name="email"
+              type="email"
+              placeholder="Enter email"
+              label="Email"
+            />
+            <FormField
+              name="password"
+              type="password"
+              placeholder="Enter password"
+              label="Password"
+            />
+            <FormField
+              name="dateOfBirth"
+              type="date"
+              placeholder="Enter date of birth"
+              label="Date of Birth"
+              max={new Date().toISOString().slice(0, 10)}
+            />
+            <SubmitButton
+              className="w-100 mt-3"
+              variant="primary"
+              title="Register"
+              type="submit"
+            />
+          </AppForm>
+          {/* Replace with a toast for server errors */}
+          {error && (
+            <div className="d-flex justify-content-center align-items-center mt-3">
+              <p className="text-center text-danger mb-0">
+                {error && error.networkError.result.errors[0].message}
+              </p>
+            </div>
+          )}
         </div>
         <div>
           <p className="d-flex align-items-center justify-content-center w-100">
@@ -131,7 +126,7 @@ export const Register = ({isNewUser, setIsNewUser}) => {
               className="fw-semibold"
               type="button"
               variant="link"
-              onClick={() => setIsNewUser(false)}
+              onClick={navigateToLogin}
             >
               Sign In
             </Button>

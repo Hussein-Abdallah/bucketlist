@@ -14,11 +14,11 @@ import {validationSchema} from './utilities';
 const LoginUser = loader('./graphql/login.graphql');
 
 export const Login = ({isNewUser, setIsNewUser}) => {
-  const formikRef = useRef();
   const [error, setError] = useState(null);
   const [, setCookie] = useCookies(['token']);
   const {setIsAuthenticated} = useAuth();
   const navigate = useNavigate();
+  const formikRef = useRef();
 
   const [loginUser] = useLazyQuery(LoginUser, {
     onCompleted: (data) => {
@@ -29,27 +29,24 @@ export const Login = ({isNewUser, setIsNewUser}) => {
       });
       navigate('/');
     },
-    onError: (error) => console.log(error.networkError.result.errors),
+    onError: (error) => setError(error),
   });
 
   async function handleSubmit({email, password}) {
     setError(null);
-    const {error} = await loginUser({
+    await loginUser({
       variables: {
         email,
         password,
       },
     });
-
-    //TODO : handle graphql errors
-    setError(error);
   }
 
-  const navigateToRegister = () => {
-    console.log('formikRef', formikRef);
+  function navigateToRegister() {
+    setError(null);
     formikRef.current?.resetForm();
     setIsNewUser(true);
-  };
+  }
 
   return (
     <Fade in={!isNewUser} timeout={5000} appear>
