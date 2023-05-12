@@ -32,6 +32,7 @@ export const Register = ({isNewUser, setIsNewUser}) => {
       },
     },
     onCompleted: (data) => {
+      console.log(data);
       setIsAuthenticated(true);
       setCookie('token', data.createUser.token, {
         path: '/',
