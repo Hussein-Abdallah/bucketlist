@@ -20,11 +20,15 @@ export function Header() {
   }
 
   return (
-    <Navbar expand="md" className="p-4" variant="light">
+    <Navbar
+      expand="md"
+      className=" py-4 px-md-4 px-sm-2 flex-nowrap"
+      variant="light"
+    >
       <Container>
         <Navbar.Brand href="/" className={styles.Logo}>
           <img src="assets/images/logo.png" alt="logo" />
-          Bucket List
+          <span className="d-none d-md-inline-block">Bucket List</span>
         </Navbar.Brand>
       </Container>
       <Container className="justify-content-end">

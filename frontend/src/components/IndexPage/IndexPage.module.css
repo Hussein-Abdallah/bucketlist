@@ -1,17 +1,77 @@
 .Container {
-  height: 100vh;
   background-image: url('../../../public/assets/images/adventure-daylight-wallpaper.jpg');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 .Container::before {
   content: '';
-  position: absolute;
-  top: 0;
+  position: fixed;
   left: 0;
-  right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-x: hidden;
+  right: 0;
+}
+
+.Card {
+  border-radius: 10px;
+  width: 100%;
+  border: none;
+  min-height: 450px;
+  box-shadow: 4px 6px 6px 0px rgba(255, 255, 255, 0.35);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.Card img {
+  height: 50%;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  width: auto;
+  object-position: center;
+  transform-origin: 50% 100%;
+  transition: transform 1.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .Card img {
+    height: 18rem;
+  }
+}
+
+.Card:hover img {
+  transform: scale(1.2);
+}
+
+.NewCard {
+  color: #9e9e9e;
+  transition: color 0.3s ease-in-out;
+  font-size: 2rem;
+}
+
+.NewCard:hover {
+  color: #747474;
+}
+
+.PlusIcon {
+  font-size: 10rem;
+}
+
+.ArrowRight {
+  font-size: 3rem;
+  opacity: 0;
+  transform: translateX(-20%);
+  transition: all 0.5s ease-in-out;
+}
+.Card:hover .ArrowRight {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.WishCount {
 }
