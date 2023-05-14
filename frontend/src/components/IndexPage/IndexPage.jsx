@@ -25,7 +25,7 @@ export function IndexPage() {
                   </Card.Text>
                 </Card.Body>
                 <div className="d-flex justify-content-between align-items-center px-3 small text-muted">
-                  <span className={styles.WishCount}>List: 0/100</span>
+                  <span>List: 0/100</span>
                   <BsArrowRightShort
                     className={classNames(
                       styles.ArrowRight,
@@ -47,7 +47,7 @@ export function IndexPage() {
                   </Card.Text>
                 </Card.Body>
                 <div className="d-flex justify-content-between align-items-center px-3 small text-muted">
-                  <span className={styles.WishCount}>List: 0/100</span>
+                  <span>List: 0/100</span>
                   <BsArrowRightShort
                     className={classNames(
                       styles.ArrowRight,
@@ -65,7 +65,7 @@ export function IndexPage() {
                   <Card.Text className="small">Lorem ipsum dolor sit</Card.Text>
                 </Card.Body>
                 <div className="d-flex justify-content-between align-items-center px-3 small text-muted">
-                  <span className={styles.WishCount}>List: 0/100</span>
+                  <span>List: 0/100</span>
                   <BsArrowRightShort
                     className={classNames(
                       styles.ArrowRight,
@@ -86,7 +86,7 @@ export function IndexPage() {
                   </Card.Text>
                 </Card.Body>
                 <div className="d-flex justify-content-between align-items-center px-3 small text-muted">
-                  <span className={styles.WishCount}>List: 0/100</span>
+                  <span>List: 0/100</span>
                   <BsArrowRightShort
                     className={classNames(
                       styles.ArrowRight,
@@ -107,7 +107,7 @@ export function IndexPage() {
                   </Card.Text>
                 </Card.Body>
                 <div className="d-flex justify-content-between align-items-center px-3 small text-muted">
-                  <span className={styles.WishCount}>List: 0/100</span>
+                  <span>List: 0/100</span>
                   <BsArrowRightShort
                     className={classNames(
                       styles.ArrowRight,
