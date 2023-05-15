@@ -5,7 +5,8 @@ module.exports = `
     description: String
     image: String
     user: User!
-    wishCount: Int!
+    totalWishes: Int
+    completedWishes: Int
   }
 
   input CategoryInput {

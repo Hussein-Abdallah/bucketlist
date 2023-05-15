@@ -1,0 +1,15 @@
+.Spinner {
+  width: 5rem;
+  height: 5rem;
+  font-size: 2rem;
+}
+
+.SpinnerContainer,
+.ErrorContainer {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  color: white;
+  font-size: 1.2rem;
+}

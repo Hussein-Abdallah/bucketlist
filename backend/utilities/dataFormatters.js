@@ -13,12 +13,17 @@ const populateUser = async (userId) => {
 };
 
 const transformCategory = (category) => {
-  const wishCount = Wish.countDocuments({category: category._doc._id});
+  const totalWishes = Wish.countDocuments({category: category._doc._id});
+  const completedWishes = Wish.countDocuments({
+    category: category._doc._id,
+    status: 'Achieved',
+  });
   return {
     ...category._doc,
     id: category._doc._id,
     user: populateUser(category.user),
-    wishCount,
+    totalWishes,
+    completedWishes,
   };
 };
 
