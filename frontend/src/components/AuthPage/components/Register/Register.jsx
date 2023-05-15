@@ -7,8 +7,8 @@ import {useNavigate} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 
 import styles from './Register.module.css';
-import {useAuth} from '../../../../foundation';
-import {AppForm, FormField, SubmitButton} from '../../../Shared';
+import {useAuth} from 'foundation';
+import {AppForm, FormField, SubmitButton} from 'components/Shared';
 const {validationSchema} = require('./utilities');
 const CREATE_USER = loader('./graphql/createUser.graphql');
 

@@ -1,5 +1,5 @@
-import {useAuth} from '../../foundation';
-import {AuthPage} from '../AuthPage/';
+import {useAuth} from 'foundation';
+import {AuthPage} from 'components/AuthPage';
 
 export function ProtectedRoute({children}) {
   const {isAuthenticated} = useAuth();

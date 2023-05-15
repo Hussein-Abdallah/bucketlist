@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 
 import {Login, Register} from './components';
-import {useAuth} from '../../foundation';
+import {useAuth} from 'foundation';
 
 import styles from './AuthPage.module.css';
 import {useNavigate} from 'react-router-dom';

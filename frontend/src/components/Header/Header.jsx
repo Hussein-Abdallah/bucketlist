@@ -4,7 +4,7 @@ import {AiFillCaretDown} from 'react-icons/ai';
 import {useCookies} from 'react-cookie';
 import {useNavigate} from 'react-router-dom';
 
-import {useAuth} from '../../foundation';
+import {useAuth} from 'foundation';
 import styles from './Header.module.css';
 
 export function Header() {

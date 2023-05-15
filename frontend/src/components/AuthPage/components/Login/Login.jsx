@@ -7,8 +7,8 @@ import {loader} from 'graphql.macro';
 import {useNavigate} from 'react-router-dom';
 
 import styles from './Login.module.css';
-import {useAuth} from '../../../../foundation';
-import {AppForm, FormField, SubmitButton} from '../../../Shared';
+import {useAuth} from 'foundation';
+import {AppForm, FormField, SubmitButton} from 'components/Shared';
 import {validationSchema} from './utilities';
 
 const LoginUser = loader('./graphql/login.graphql');
