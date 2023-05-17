@@ -1,1 +1,1 @@
-export {AppForm, FormField, SubmitButton} from './Forms';
+export {AppForm, FormField, SubmitButton, UploadImage} from './Forms';

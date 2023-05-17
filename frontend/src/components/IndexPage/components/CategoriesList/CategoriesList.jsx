@@ -1,5 +1,5 @@
+import {useState} from 'react';
 import {Spinner} from 'react-bootstrap';
-
 import {loader} from 'graphql.macro';
 import {useQuery} from '@apollo/client';
 
@@ -10,6 +10,7 @@ const GetCategories = loader('./graphql/getCategories.graphql');
 
 export function CategoriesList() {
   const {data, loading, error} = useQuery(GetCategories);
+  const [categoryModal, setCategoryModal] = useState(null);
 
   if (loading) {
     return (
@@ -29,15 +30,16 @@ export function CategoriesList() {
 
   const {categories} = data;
 
-  console.log('categories', categories);
-
   return (
     <div className="container pb-5">
       <div className="row">
         {categories.map((category) => (
           <CategoryCard key={category.id} category={category} />
         ))}
-        <NewCategoryCard />
+        <NewCategoryCard
+          categoryModal={categoryModal}
+          setCategoryModal={setCategoryModal}
+        />
       </div>
     </div>
   );

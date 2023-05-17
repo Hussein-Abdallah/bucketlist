@@ -1,0 +1,1 @@
+export {categoryValidationSchema} from './categoryValidationSchema';

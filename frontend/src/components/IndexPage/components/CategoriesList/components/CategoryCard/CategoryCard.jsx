@@ -3,15 +3,17 @@ import classNames from 'classnames';
 import {BsArrowRightShort} from 'react-icons/bs';
 
 import styles from './CategoryCard.module.css';
+import {getImageUrl} from 'foundation/utilities';
 
 export function CategoryCard({category}) {
   const {title, description, image, totalWishes, completedWishes} = category;
+  const imageUrl = getImageUrl(image);
   return (
     <div className="col-12 col-xl-3 col-lg-4 col-md-6 mt-3 d-block d-md-flex">
       <Card className={classNames(styles.Card)}>
         <Card.Img
           variant="top"
-          src={image || '/assets/images/placeholder.gif'}
+          src={imageUrl}
           className={styles.CategoryImage}
         />
         <Card.Body>
