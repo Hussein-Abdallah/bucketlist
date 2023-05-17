@@ -4,13 +4,14 @@ import {loader} from 'graphql.macro';
 import {useQuery} from '@apollo/client';
 
 import styles from './CategoriesList.module.css';
-import {CategoryCard, NewCategoryCard} from './components';
+import {CategoryCard, NewCategoryCard, CategoryModal} from './components';
 
 const GetCategories = loader('./graphql/getCategories.graphql');
 
 export function CategoriesList() {
   const {data, loading, error} = useQuery(GetCategories);
   const [categoryModal, setCategoryModal] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
 
   if (loading) {
     return (
@@ -28,19 +29,27 @@ export function CategoriesList() {
     return <div className={styles.ErrorContainer}>Error! {error.message}</div>;
   }
 
-  const {categories} = data;
-
   return (
-    <div className="container pb-5">
-      <div className="row">
-        {categories.map((category) => (
-          <CategoryCard key={category.id} category={category} />
-        ))}
-        <NewCategoryCard
-          categoryModal={categoryModal}
-          setCategoryModal={setCategoryModal}
-        />
+    <>
+      <div className="container pb-5">
+        <div className="row">
+          {data.categories &&
+            data.categories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                setCategoryModal={setCategoryModal}
+                setCategoryId={setCategoryId}
+              />
+            ))}
+          <NewCategoryCard setCategoryModal={setCategoryModal} />
+        </div>
       </div>
-    </div>
+      <CategoryModal
+        CategoryModal={categoryModal}
+        setCategoryModal={setCategoryModal}
+        categoryId={categoryId}
+      />
+    </>
   );
 }
