@@ -88,25 +88,35 @@ export function CategoryModal({
   const handleUpdateSubmit = async (values) => {
     setError(null);
 
+    const updateValues = ['title', 'description'].reduce((acc, key) => {
+      if (values[key] !== category[key]) {
+        return {
+          ...acc,
+          [key]: values[key],
+        };
+      }
+      return acc;
+    }, {});
+
     if (values.image && `bucketlist/${values.image.name}` !== category.image) {
       const result = await uploadImage(values.image);
       if (result.error) {
         setError(result.error);
         return;
       }
-      values.image = result.public_id;
+      updateValues.image = result.public_id;
+    } else if (!values.image && category.image) {
+      updateValues.image = null;
     }
 
-    console.log(category.id);
-
+    if (Object.keys(updateValues).length === 0) {
+      setError({message: 'No changes detected'});
+      return;
+    }
     await updateCategory({
       variables: {
         id: category.id,
-        input: {
-          title: values.title,
-          description: values.description,
-          image: values.image,
-        },
+        input: updateValues,
       },
     });
   };
