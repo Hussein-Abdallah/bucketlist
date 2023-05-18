@@ -11,7 +11,7 @@ const GetCategories = loader('./graphql/getCategories.graphql');
 export function CategoriesList() {
   const {data, loading, error} = useQuery(GetCategories);
   const [categoryModal, setCategoryModal] = useState(null);
-  const [categoryId, setCategoryId] = useState(null);
+  const [category, setCategory] = useState(null);
 
   if (loading) {
     return (
@@ -39,16 +39,17 @@ export function CategoriesList() {
                 key={category.id}
                 category={category}
                 setCategoryModal={setCategoryModal}
-                setCategoryId={setCategoryId}
+                setCategory={setCategory}
               />
             ))}
           <NewCategoryCard setCategoryModal={setCategoryModal} />
         </div>
       </div>
       <CategoryModal
-        CategoryModal={categoryModal}
+        categoryModal={categoryModal}
         setCategoryModal={setCategoryModal}
-        categoryId={categoryId}
+        category={category}
+        setCategory={setCategory}
       />
     </>
   );

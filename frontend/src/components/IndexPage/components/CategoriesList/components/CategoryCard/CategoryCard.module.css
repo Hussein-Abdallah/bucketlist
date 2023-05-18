@@ -6,6 +6,7 @@
   box-shadow: 4px 6px 6px 0px rgba(255, 255, 255, 0.35);
   overflow: hidden;
   cursor: pointer;
+  position: relative;
 }
 
 .CategoryImage {
@@ -37,4 +38,19 @@
 .Card:hover .ArrowRight {
   opacity: 1;
   transform: translateX(0);
+}
+
+.EditIconContainer {
+  position: absolute;
+  top: 0.6rem;
+  right: 1.2rem;
+  font-size: 1.2rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4rem;
+  cursor: pointer;
 }

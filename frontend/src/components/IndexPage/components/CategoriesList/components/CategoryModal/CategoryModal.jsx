@@ -4,30 +4,69 @@ import {useMutation} from '@apollo/client';
 import {loader} from 'graphql.macro';
 
 import {AppForm, FormField, SubmitButton, UploadImage} from 'components/Shared';
-import {uploadImage} from 'foundation/utilities';
-import {categoryValidationSchema} from '../../utilities';
+import {getImageUrl, uploadImage} from 'foundation/utilities';
+import {CATEGORY_MODAL, categoryValidationSchema} from '../../utilities';
 
 const CREATE_CATEGORY = loader('./graphql/createCategory.graphql');
+const UPDATE_CATEGORY = loader('./graphql/updateCategory.graphql');
 
-export function CategoryModal({CategoryModal, setCategoryModal}) {
+export function CategoryModal({
+  categoryModal,
+  setCategoryModal,
+  setCategory,
+  category,
+}) {
   const [error, setError] = useState(null);
 
-  const [createCategory, {loading}] = useMutation(CREATE_CATEGORY, {
-    onCompleted: () => {
-      setCategoryModal(null);
-    },
-    onError: (error) => {
-      setError(error.networkError.result.errors[0]);
-    },
-    refetchQueries: ['GetCategories'],
-  });
+  const {title, description, image} = category || {
+    title: null,
+    description: null,
+    image: null,
+  };
+  const imageUrl =
+    categoryModal === CATEGORY_MODAL.EDIT_CATEGORY && image
+      ? getImageUrl(image)
+      : null;
 
-  const handleSubmit = async (values) => {
+  const initialValues = {
+    title,
+    description,
+    image: imageUrl,
+  };
+
+  const [createCategory, {loading: createLoading}] = useMutation(
+    CREATE_CATEGORY,
+    {
+      onCompleted: () => {
+        closeModal();
+      },
+      onError: (error) => {
+        setError(error.networkError.result.errors[0]);
+      },
+      refetchQueries: ['GetCategories'],
+    },
+  );
+
+  const [updateCategory, {loading: updateLoading}] = useMutation(
+    UPDATE_CATEGORY,
+    {
+      onCompleted: () => {
+        closeModal();
+      },
+      onError: (error) => {
+        setError(error.networkError.result.errors[0]);
+      },
+      refetchQueries: ['GetCategories'],
+    },
+  );
+
+  const handleCreateSubmit = async (values) => {
     setError(null);
     let public_id = null;
 
     if (values.image) {
       const result = await uploadImage(values.image);
+      console.log(result);
       if (result.error) {
         setError(result.error);
         return;
@@ -46,26 +85,53 @@ export function CategoryModal({CategoryModal, setCategoryModal}) {
     });
   };
 
+  const handleUpdateSubmit = async (values) => {
+    setError(null);
+
+    if (values.image && `bucketlist/${values.image.name}` !== category.image) {
+      const result = await uploadImage(values.image);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      values.image = result.public_id;
+    }
+
+    console.log(category.id);
+
+    await updateCategory({
+      variables: {
+        id: category.id,
+        input: {
+          title: values.title,
+          description: values.description,
+          image: values.image,
+        },
+      },
+    });
+  };
+
   function closeModal() {
     setError(null);
+    setCategory(null);
     setCategoryModal(null);
   }
 
   return (
     <Modal
-      show={CategoryModal !== null}
+      show={categoryModal !== null}
       onHide={closeModal}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <AppForm
-        initialValues={{
-          title: '',
-          description: '',
-          image: '',
-        }}
-        onSubmit={handleSubmit}
+        initialValues={initialValues}
+        onSubmit={
+          categoryModal === CATEGORY_MODAL.NEW_CATEGORY
+            ? handleCreateSubmit
+            : handleUpdateSubmit
+        }
         validationSchema={categoryValidationSchema}
       >
         <Modal.Header closeButton>
@@ -87,11 +153,18 @@ export function CategoryModal({CategoryModal, setCategoryModal}) {
             rows={3}
             as="textarea"
           />
-          <UploadImage />
+          <UploadImage image={imageUrl} />
           {error && <p className="text-danger text-center">{error.message}</p>}
         </Modal.Body>
         <Modal.Footer>
-          <SubmitButton title="Create" spinner={loading} />
+          <SubmitButton
+            title={
+              categoryModal === CATEGORY_MODAL.NEW_CATEGORY
+                ? 'Create'
+                : 'Update'
+            }
+            spinner={createLoading || updateLoading}
+          />
           <Button variant="secondary" onClick={closeModal}>
             Close
           </Button>
