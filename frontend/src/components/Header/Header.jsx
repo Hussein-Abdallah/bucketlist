@@ -6,6 +6,7 @@ import {useNavigate} from 'react-router-dom';
 
 import {useAuth} from 'foundation';
 import styles from './Header.module.css';
+import {apolloClient} from 'foundation/ApolloClientProvider';
 
 export function Header() {
   const [, , removeCookie] = useCookies(['token']);
@@ -14,6 +15,8 @@ export function Header() {
 
   function handleLogout() {
     removeCookie('token');
+    sessionStorage.clear();
+    apolloClient.clearStore();
     setIsAuthenticated(false);
 
     navigate('/');

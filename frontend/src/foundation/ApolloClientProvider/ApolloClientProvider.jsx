@@ -31,7 +31,7 @@ const link = from([
   }),
 ]);
 
-const client = new ApolloClient({
+export const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   link: link,
   headers: {
@@ -40,5 +40,5 @@ const client = new ApolloClient({
 });
 
 export function ApolloClientProvider({children}) {
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 }

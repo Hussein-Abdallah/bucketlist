@@ -1,1 +1,1 @@
-export {ApolloClientProvider} from './ApolloClientProvider';
+export {ApolloClientProvider, apolloClient} from './ApolloClientProvider';
