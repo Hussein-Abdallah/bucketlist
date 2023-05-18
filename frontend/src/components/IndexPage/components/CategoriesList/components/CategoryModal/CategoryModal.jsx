@@ -19,8 +19,8 @@ export function CategoryModal({
   const [error, setError] = useState(null);
 
   const {title, description, image} = category || {
-    title: null,
-    description: null,
+    title: '',
+    description: '',
     image: null,
   };
   const imageUrl =
