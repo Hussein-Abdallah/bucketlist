@@ -2,7 +2,7 @@ import {Card} from 'react-bootstrap';
 import classNames from 'classnames';
 import {BsArrowRightShort} from 'react-icons/bs';
 import {AiFillEdit} from 'react-icons/ai';
-
+import {MdDelete} from 'react-icons/md';
 import styles from './CategoryCard.module.css';
 import {getImageUrl} from 'foundation/utilities';
 import {CATEGORY_MODAL} from '../../utilities';
@@ -13,6 +13,11 @@ export function CategoryCard({category, setCategoryModal, setCategory}) {
 
   const handleEdit = () => {
     setCategoryModal(CATEGORY_MODAL.EDIT_CATEGORY);
+    setCategory(category);
+  };
+
+  const handleDelete = () => {
+    setCategoryModal(CATEGORY_MODAL.DELETE_CATEGORY);
     setCategory(category);
   };
   return (
@@ -41,8 +46,17 @@ export function CategoryCard({category, setCategoryModal, setCategory}) {
           />
         </div>
       </Card>
-      <div className={styles.EditIconContainer} onClick={handleEdit}>
-        <AiFillEdit fill="#000" className={styles.EditIcon} />
+      <div
+        className={classNames(styles.IconContainer, styles.EditIconContainer)}
+        onClick={handleEdit}
+      >
+        <AiFillEdit fill="#000" />
+      </div>
+      <div
+        className={classNames(styles.IconContainer, styles.DeleteIconContainer)}
+        onClick={handleDelete}
+      >
+        <MdDelete fill="#ff2400" />
       </div>
     </div>
   );

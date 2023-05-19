@@ -3,12 +3,19 @@ import {Modal, Button} from 'react-bootstrap';
 import {useMutation} from '@apollo/client';
 import {loader} from 'graphql.macro';
 
-import {AppForm, FormField, SubmitButton, UploadImage} from 'components/Shared';
+import {
+  AppForm,
+  DeleteModal,
+  FormField,
+  SubmitButton,
+  UploadImage,
+} from 'components/Shared';
 import {getImageUrl, uploadImage} from 'foundation/utilities';
 import {CATEGORY_MODAL, categoryValidationSchema} from '../../utilities';
 
 const CREATE_CATEGORY = loader('./graphql/createCategory.graphql');
 const UPDATE_CATEGORY = loader('./graphql/updateCategory.graphql');
+const DELETE_CATEGORY = loader('./graphql/deleteCategory.graphql');
 
 export function CategoryModal({
   categoryModal,
@@ -59,6 +66,16 @@ export function CategoryModal({
       refetchQueries: ['GetCategories'],
     },
   );
+
+  const [deleteCategory] = useMutation(DELETE_CATEGORY, {
+    onCompleted: () => {
+      closeModal();
+    },
+    onError: (error) => {
+      setError(error.networkError.result.errors[0]);
+    },
+    refetchQueries: ['GetCategories'],
+  });
 
   const handleCreateSubmit = async (values) => {
     setError(null);
@@ -121,6 +138,16 @@ export function CategoryModal({
     });
   };
 
+  const handleDeleteSubmit = async (event) => {
+    event.preventDefault();
+    setError(null);
+    await deleteCategory({
+      variables: {
+        id: category.id,
+      },
+    });
+  };
+
   function closeModal() {
     setError(null);
     setCategory(null);
@@ -135,51 +162,64 @@ export function CategoryModal({
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <AppForm
-        initialValues={initialValues}
-        onSubmit={
-          categoryModal === CATEGORY_MODAL.NEW_CATEGORY
-            ? handleCreateSubmit
-            : handleUpdateSubmit
-        }
-        validationSchema={categoryValidationSchema}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Add new category
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormField
-            name="title"
-            label="Title"
-            placeholder="Enter category title"
-          />
-          <FormField
-            name="description"
-            label="Description"
-            placeholder="Enter category description"
-            cols={30}
-            rows={3}
-            as="textarea"
-          />
-          <UploadImage image={imageUrl} />
-          {error && <p className="text-danger text-center">{error.message}</p>}
-        </Modal.Body>
-        <Modal.Footer>
-          <SubmitButton
-            title={
-              categoryModal === CATEGORY_MODAL.NEW_CATEGORY
-                ? 'Create'
-                : 'Update'
-            }
-            spinner={createLoading || updateLoading}
-          />
-          <Button variant="secondary" onClick={closeModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </AppForm>
+      {categoryModal === CATEGORY_MODAL.DELETE_CATEGORY ? (
+        <DeleteModal
+          title={category.title}
+          message="Are you sure you want to delete this category and it's items list?"
+          closeModal={closeModal}
+          handleSubmit={handleDeleteSubmit}
+        />
+      ) : (
+        <AppForm
+          initialValues={initialValues}
+          onSubmit={
+            categoryModal === CATEGORY_MODAL.NEW_CATEGORY
+              ? handleCreateSubmit
+              : handleUpdateSubmit
+          }
+          validationSchema={categoryValidationSchema}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              {categoryModal === CATEGORY_MODAL.NEW_CATEGORY
+                ? 'Add new category'
+                : `Edit ${title}`}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FormField
+              name="title"
+              label="Title"
+              placeholder="Enter category title"
+            />
+            <FormField
+              name="description"
+              label="Description"
+              placeholder="Enter category description"
+              cols={30}
+              rows={3}
+              as="textarea"
+            />
+            <UploadImage image={imageUrl} />
+            {error && (
+              <p className="text-danger text-center">{error.message}</p>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <SubmitButton
+              title={
+                categoryModal === CATEGORY_MODAL.NEW_CATEGORY
+                  ? 'Create'
+                  : 'Update'
+              }
+              spinner={createLoading || updateLoading}
+            />
+            <Button variant="secondary" onClick={closeModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </AppForm>
+      )}
     </Modal>
   );
 }

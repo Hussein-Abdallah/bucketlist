@@ -1,4 +1,7 @@
+/* eslint-disable @babel/no-invalid-this */
 const mongoose = require('mongoose');
+
+const Wish = require('./wishes');
 
 const categorySchema = new mongoose.Schema(
   {
@@ -17,5 +20,15 @@ const categorySchema = new mongoose.Schema(
   },
   {timestamps: true},
 );
+
+categorySchema.pre('findOneAndDelete', async function (next) {
+  try {
+    const categoryId = this.getFilter()._id;
+    await Wish.deleteMany({category: categoryId});
+  } catch (error) {
+    throw new Error(`Error deleting the list items: ${error}`);
+  }
+  next();
+});
 
 module.exports = mongoose.model('Category', categorySchema);

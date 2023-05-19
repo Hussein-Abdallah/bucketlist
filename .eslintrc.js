@@ -10,5 +10,13 @@ module.exports = {
   rules: {
     'prettier/prettier': 0,
     'no-shadow': 'off',
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
+      },
+    ],
   },
 };
