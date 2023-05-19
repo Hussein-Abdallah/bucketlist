@@ -7,6 +7,8 @@ import {useNavigate} from 'react-router-dom';
 import {useAuth} from 'foundation';
 import styles from './Header.module.css';
 import {apolloClient} from 'foundation/ApolloClientProvider';
+import {IMAGE_ASSETS_PATH} from 'foundation';
+import {getImageUrl} from 'foundation/utilities';
 
 export function Header() {
   const [, , removeCookie] = useCookies(['token']);
@@ -30,7 +32,7 @@ export function Header() {
     >
       <Container>
         <Navbar.Brand href="/" className={styles.Logo}>
-          <img src="assets/images/logo.png" alt="logo" />
+          <img src={getImageUrl(IMAGE_ASSETS_PATH.logo, true)} alt="logo" />
           <span className="d-none d-md-inline-block">Bucket List</span>
         </Navbar.Brand>
       </Container>
@@ -41,7 +43,7 @@ export function Header() {
               <Dropdown.Toggle active={false} bsPrefix="px-2 pt-2">
                 <>
                   <img
-                    src="assets/images/user.jpeg"
+                    src={getImageUrl(IMAGE_ASSETS_PATH.user)}
                     alt="user"
                     className={classNames(styles.Avatar, 'rounded-circle')}
                     loading="lazy"
