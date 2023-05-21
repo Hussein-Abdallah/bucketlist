@@ -5,6 +5,7 @@ module.exports = `
     description: String
     image: String
     user: User!
+    wishes: [Wish!]
     totalWishes: Int
     completedWishes: Int
   }

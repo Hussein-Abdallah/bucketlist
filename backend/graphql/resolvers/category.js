@@ -19,6 +19,12 @@ const category = async (_source, {id}, context) => {
   }
 
   const categoryDetails = await Category.findOne({_id: id, user: userId});
+  if (!categoryDetails) {
+    throw new Error('Category not found');
+  }
+
+  await categoryDetails.populate('wishes');
+
   return transformCategory(categoryDetails);
 };
 

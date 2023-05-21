@@ -21,6 +21,12 @@ const categorySchema = new mongoose.Schema(
   {timestamps: true},
 );
 
+categorySchema.virtual('wishes', {
+  ref: 'Wish',
+  localField: '_id',
+  foreignField: 'category',
+});
+
 categorySchema.pre('findOneAndDelete', async function (next) {
   try {
     const categoryId = this.getFilter()._id;

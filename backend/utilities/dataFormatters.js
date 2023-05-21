@@ -18,10 +18,13 @@ const transformCategory = (category) => {
     category: category._doc._id,
     status: 'Achieved',
   });
+
+  console.log('category', category.wishes);
   return {
     ...category._doc,
     id: category._doc._id,
     user: populateUser(category.user),
+    wishes: category.wishes,
     totalWishes,
     completedWishes,
   };
