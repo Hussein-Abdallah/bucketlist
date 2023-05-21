@@ -1,10 +1,9 @@
 import {useState} from 'react';
-import {Spinner} from 'react-bootstrap';
 import {loader} from 'graphql.macro';
 import {useQuery} from '@apollo/client';
 
-import styles from './CategoriesList.module.css';
 import {CategoryCard, NewCategoryCard, CategoryModal} from './components';
+import {ErrorContainer, LoadingSpinner} from 'components/Shared';
 
 const GetCategories = loader('./graphql/getCategories.graphql');
 
@@ -14,19 +13,11 @@ export function CategoriesList() {
   const [category, setCategory] = useState(null);
 
   if (loading) {
-    return (
-      <div className={styles.SpinnerContainer}>
-        <Spinner
-          animation="border"
-          variant="light"
-          className={styles.Spinner}
-        />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return <div className={styles.ErrorContainer}>Error! {error.message}</div>;
+    return <ErrorContainer error={error} />;
   }
 
   return (
