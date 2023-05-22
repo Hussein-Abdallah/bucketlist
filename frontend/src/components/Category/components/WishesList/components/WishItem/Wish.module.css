@@ -1,0 +1,20 @@
+tr td:first-child {
+  width: 1%;
+}
+
+.ActionIcon {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  fill: #6c757d;
+}
+
+.ActionIcon:hover {
+  fill: #000;
+}
+
+@media (max-width: 767px) {
+  .ActionIcon {
+    fill: #000;
+  }
+}

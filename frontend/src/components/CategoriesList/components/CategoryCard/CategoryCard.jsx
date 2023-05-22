@@ -6,8 +6,10 @@ import {MdDelete} from 'react-icons/md';
 import styles from './CategoryCard.module.css';
 import {getImageUrl} from 'foundation/utilities';
 import {CATEGORY_MODAL} from '../../utilities';
+import {useNavigate} from 'react-router-dom';
 
 export function CategoryCard({category, setCategoryModal, setCategory}) {
+  const navigate = useNavigate();
   const {title, description, image, totalWishes, completedWishes} = category;
   const imageUrl = getImageUrl(image);
 
@@ -25,7 +27,7 @@ export function CategoryCard({category, setCategoryModal, setCategory}) {
       <Card
         className={classNames(styles.Card)}
         onClick={() => {
-          console.log('card');
+          navigate(`/category/${category.id}`);
         }}
       >
         <Card.Img

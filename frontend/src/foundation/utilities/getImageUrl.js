@@ -2,11 +2,14 @@ import {CloudinaryImage} from '@cloudinary/url-gen';
 import {fill} from '@cloudinary/url-gen/actions/resize';
 import {IMAGE_ASSETS_PATH} from 'foundation/constants';
 
-export function getImageUrl(image, logo) {
+export function getImageUrl(image, logo, size) {
+  const HEIGHT_SIZE = size ? size.height : 250;
+  const WIDTH_SIZE = size ? size.width : 300;
+
   const cldImage = new CloudinaryImage(image, {
     cloudName: 'dv6n26bjx',
     secure: true,
-  }).resize(fill().height(250).width(300));
+  }).resize(fill().height(HEIGHT_SIZE).width(WIDTH_SIZE));
 
   if (logo) {
     return new CloudinaryImage(IMAGE_ASSETS_PATH.logo, {
@@ -19,7 +22,7 @@ export function getImageUrl(image, logo) {
       cloudName: 'dv6n26bjx',
       secure: true,
     })
-      .resize(fill().height(250).width(300))
+      .resize(fill().height(HEIGHT_SIZE).width(WIDTH_SIZE))
       .toURL();
   }
 

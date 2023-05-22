@@ -1,0 +1,19 @@
+query GetCategory($id: ID!) {
+  category(id: $id) {
+    id
+    title
+    description
+    image
+    totalWishes
+    completedWishes
+    wishes {
+      id
+      title
+      location
+      description
+      status
+      timeline
+      cost
+    }
+  }
+}

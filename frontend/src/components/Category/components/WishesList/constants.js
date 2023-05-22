@@ -1,0 +1,6 @@
+export const WISH_MODAL = {
+  NEW_WISH: 'NEW_WISH',
+  EDIT_WISH: 'EDIT_WISH',
+  DELETE_WISH: 'DELETE_WISH',
+  VIEW_WISH: 'VIEW_WISH',
+};

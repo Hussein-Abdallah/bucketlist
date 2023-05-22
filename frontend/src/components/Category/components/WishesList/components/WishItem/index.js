@@ -1,0 +1,1 @@
+export {WishItem} from './WishItem';

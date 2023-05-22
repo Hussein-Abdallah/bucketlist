@@ -1,0 +1,1 @@
+export {WishModal} from './WishModal';
