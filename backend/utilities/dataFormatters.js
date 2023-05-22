@@ -16,7 +16,7 @@ const transformCategory = (category) => {
   const totalWishes = Wish.countDocuments({category: category._doc._id});
   const completedWishes = Wish.countDocuments({
     category: category._doc._id,
-    status: 'Achieved',
+    status: true,
   });
 
   console.log('category', category.wishes);

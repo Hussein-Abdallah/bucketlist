@@ -13,9 +13,8 @@ const wishSchema = new mongoose.Schema(
     cost: {type: Number},
     timeline: {type: Date, default: Date.now},
     status: {
-      type: String,
-      enum: ['New', 'Planning', 'In progress', 'Achieved'],
-      default: 'New',
+      type: Boolean,
+      default: false,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

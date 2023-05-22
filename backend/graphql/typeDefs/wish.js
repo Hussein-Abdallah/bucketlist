@@ -1,17 +1,11 @@
 module.exports = `
-  enum Status {
-    New
-    Planning
-    In progress
-    Achieved
-  }
 
   type Wish {
     id: ID!
     title: String!
     location: String
     description: String
-    status: String!
+    status: Boolean!
     timeline: String
     image: String
     cost: Float
@@ -36,7 +30,7 @@ module.exports = `
     location: String
     image: String
     description: String
-    status: Status
+    status: Boolean
     timeline: String
     cost: Float
   }
