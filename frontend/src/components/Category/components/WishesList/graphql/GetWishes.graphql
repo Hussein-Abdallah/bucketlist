@@ -1,0 +1,11 @@
+query GetWishes($id: ID!) {
+  wishes(category: $id) {
+    id
+    title
+    location
+    description
+    status
+    timeline
+    cost
+  }
+}

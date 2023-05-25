@@ -1,13 +1,47 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ProgressBar, Table} from 'react-bootstrap';
 
 import styles from './WishesList.module.css';
 import {WishItem, WishModal} from './components';
-import {WISH_MODAL} from './constants';
+import {WISH_MODAL} from './utilities';
+import {useQuery} from '@apollo/client';
+import {loader} from 'graphql.macro';
+import {LoadingSpinner, ErrorContainer} from 'components/Shared';
 
-export function WishesList({wishes, totalWishes, completedWishes}) {
+const GET_WISHES = loader('./graphql/GetWishes.graphql');
+
+export function WishesList({categoryId}) {
+  const [wishStatus, setWishStatus] = useState({
+    completedWishes: 0,
+    totalWishes: 0,
+  });
   const [wishModalOpen, setWishModalOpen] = useState(null);
-  const progressStatus = (completedWishes / totalWishes) * 100 || 0;
+  const [wishDetails, setWishDetails] = useState(null);
+  const progressStatus =
+    Math.floor((wishStatus.completedWishes / wishStatus.totalWishes) * 100) ||
+    0;
+
+  const {data, loading, error} = useQuery(GET_WISHES, {
+    variables: {id: categoryId},
+  });
+
+  useEffect(() => {
+    if (data) {
+      setWishStatus({
+        completedWishes: data.wishes.filter((wish) => wish.status).length,
+        totalWishes: data.wishes.length,
+      });
+    }
+  }, [data]);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorContainer error={error} />;
+  }
+
   return (
     <>
       <div className="col-12 col-lg-6">
@@ -20,17 +54,18 @@ export function WishesList({wishes, totalWishes, completedWishes}) {
           className={styles.ProgressBar}
         />
         <div className="d-flex justify-content-between">
-          <p className="mb-0">Achieved: {completedWishes}</p>
-          <p className="mb-0">Total: {totalWishes}</p>
+          <p className="mb-0">Achieved: {wishStatus.completedWishes}</p>
+          <p className="mb-0">Total: {wishStatus.totalWishes}</p>
         </div>
         <hr />
         <Table hover>
           <tbody>
-            {wishes.map((wish) => (
+            {data.wishes.map((wish) => (
               <WishItem
                 key={wish.id}
                 wish={wish}
                 setWishModalOpen={setWishModalOpen}
+                setWishDetails={setWishDetails}
               />
             ))}
           </tbody>
@@ -51,6 +86,7 @@ export function WishesList({wishes, totalWishes, completedWishes}) {
       <WishModal
         wishModalOpen={wishModalOpen}
         setWishModalOpen={setWishModalOpen}
+        wishDetails={wishDetails}
       />
     </>
   );

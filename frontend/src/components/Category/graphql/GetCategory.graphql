@@ -6,14 +6,5 @@ query GetCategory($id: ID!) {
     image
     totalWishes
     completedWishes
-    wishes {
-      id
-      title
-      location
-      description
-      status
-      timeline
-      cost
-    }
   }
 }

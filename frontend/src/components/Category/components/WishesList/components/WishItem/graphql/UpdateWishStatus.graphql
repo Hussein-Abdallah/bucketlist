@@ -1,0 +1,6 @@
+mutation UpdateWishStatus($id: ID!, $input: WishUpdateInput!) {
+  updateWish(id: $id, input: $input) {
+    id
+    status
+  }
+}
