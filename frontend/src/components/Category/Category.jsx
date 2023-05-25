@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useQuery} from '@apollo/client';
 import {loader} from 'graphql.macro';
-
+import {BsArrowBarLeft as BackIcon} from 'react-icons/bs';
 import {ErrorContainer, LoadingSpinner} from 'components/Shared';
 import {CategoryDetails, WishesList} from './components';
 
@@ -12,6 +12,7 @@ const GET_CATEGORY = loader('./graphql/getCategory.graphql');
 
 export function Category() {
   const {id} = useParams();
+  const navigate = useNavigate();
 
   const {loading, error, data} = useQuery(GET_CATEGORY, {
     variables: {id: id},
@@ -32,12 +33,19 @@ export function Category() {
   return (
     <div className={classNames(styles.Container, 'container rounded')}>
       <div className="row">
+        <div className={styles.BackButton} onClick={() => navigate(-1)}>
+          <BackIcon />
+          Back to Categories
+        </div>
+      </div>
+      <div className="row">
         <CategoryDetails
           title={title}
           description={description}
           image={image}
         />
         <WishesList
+          categoryId={id}
           wishes={wishes}
           totalWishes={totalWishes}
           completedWishes={completedWishes}
