@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const {User} = require('../../models');
 
-const login = async (_, {email, password}) => {
+const login = async (_, {email, password}, context) => {
   const user = await User.findOne({email});
   if (!user) {
     throw new Error('Credentials are incorrect!');
@@ -22,6 +22,11 @@ const login = async (_, {email, password}) => {
     },
   );
 
+  context.res.cookie('token', token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+  });
+
   return {
     userId: user.id,
     token,
@@ -29,7 +34,7 @@ const login = async (_, {email, password}) => {
   };
 };
 
-const createUser = async (_parent, args) => {
+const createUser = async (_parent, args, context) => {
   const existingUser = await User.findOne({email: args.input.email});
 
   if (existingUser) {
@@ -53,6 +58,11 @@ const createUser = async (_parent, args) => {
       expiresIn: '1h',
     },
   );
+
+  context.res.cookie('token', token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+  });
 
   return {
     userId: newUser.id,

@@ -1,14 +1,13 @@
 import {useState} from 'react';
-import {loader} from 'graphql.macro';
+
 import {useQuery} from '@apollo/client';
 
 import {CategoryCard, NewCategoryCard, CategoryModal} from './components';
 import {ErrorContainer, LoadingSpinner} from 'components/Shared';
-
-const GetCategories = loader('./graphql/getCategories.graphql');
+import {GET_CATEGORIES} from './graphql/GetCategories';
 
 export function CategoriesList() {
-  const {data, loading, error} = useQuery(GetCategories);
+  const {data, loading, error} = useQuery(GET_CATEGORIES);
   const [categoryModal, setCategoryModal] = useState(null);
   const [category, setCategory] = useState(null);
 

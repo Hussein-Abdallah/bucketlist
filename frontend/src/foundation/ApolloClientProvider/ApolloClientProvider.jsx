@@ -26,7 +26,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 const link = from([
   errorLink,
   new HttpLink({
-    uri: 'http://localhost:5050/graphql',
+    uri: process.env.REACT_APP_API_URL,
     credentials: 'include',
   }),
 ]);

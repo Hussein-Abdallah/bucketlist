@@ -1,14 +1,12 @@
 import classNames from 'classnames';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useQuery} from '@apollo/client';
-import {loader} from 'graphql.macro';
 import {BsArrowBarLeft as BackIcon} from 'react-icons/bs';
+
 import {ErrorContainer, LoadingSpinner} from 'components/Shared';
 import {CategoryDetails, WishesList} from './components';
-
+import {GET_CATEGORY} from './graphql/GetCategory';
 import styles from './Category.module.css';
-
-const GET_CATEGORY = loader('./graphql/getCategory.graphql');
 
 export function Category() {
   const {id} = useParams();

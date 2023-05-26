@@ -3,15 +3,13 @@ import {Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
 import {useLazyQuery} from '@apollo/client';
 import {useCookies} from 'react-cookie';
-import {loader} from 'graphql.macro';
 import {useNavigate} from 'react-router-dom';
 
 import styles from './Login.module.css';
 import {useAuth} from 'foundation';
 import {AppForm, FormField, SubmitButton} from 'components/Shared';
 import {validationSchema} from './utilities';
-
-const LoginUser = loader('./graphql/login.graphql');
+import {LOGIN_USER} from './graphql/Login';
 
 export const Login = ({isNewUser, setIsNewUser}) => {
   const [error, setError] = useState(null);
@@ -20,7 +18,7 @@ export const Login = ({isNewUser, setIsNewUser}) => {
   const navigate = useNavigate();
   const formikRef = useRef();
 
-  const [loginUser] = useLazyQuery(LoginUser, {
+  const [loginUser] = useLazyQuery(LOGIN_USER, {
     onCompleted: (data) => {
       setIsAuthenticated(true);
       setCookie('token', data.login.token, {
