@@ -1,6 +1,0 @@
-mutation UpdateWish($id: ID!, $input: WishUpdateInput!) {
-  updateWish(id: $id, input: $input) {
-    id
-    title
-  }
-}

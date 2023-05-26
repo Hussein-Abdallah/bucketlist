@@ -1,17 +1,15 @@
 import {useState} from 'react';
 import {AiFillEye, AiFillEdit, AiOutlineDelete} from 'react-icons/ai';
-import {loader} from 'graphql.macro';
 import {useMutation} from '@apollo/client';
 
 import styles from './WishItem.module.css';
 import {WISH_MODAL} from '../../utilities';
-
-const UPDATE_WISH = loader('./graphql/UpdateWishStatus.graphql');
+import {UPDATE_WISH_STATUS} from './graphql/UpdateWishStatus';
 
 export function WishItem({wish, setWishModalOpen, setWishDetails}) {
   const [wishViewOpen, setWishViewOpen] = useState(false);
 
-  const [updateWishStatus] = useMutation(UPDATE_WISH, {
+  const [updateWishStatus] = useMutation(UPDATE_WISH_STATUS, {
     onError: (error) => {
       alert(error.networkError.result.errors[0].message);
     },

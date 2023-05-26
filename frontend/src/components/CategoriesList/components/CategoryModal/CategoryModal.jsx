@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import {useMutation} from '@apollo/client';
-import {loader} from 'graphql.macro';
 
 import {
   AppForm,
@@ -12,10 +11,9 @@ import {
 } from 'components/Shared';
 import {getImageUrl, uploadImage} from 'foundation/utilities';
 import {CATEGORY_MODAL, categoryValidationSchema} from '../../utilities';
-
-const CREATE_CATEGORY = loader('./graphql/createCategory.graphql');
-const UPDATE_CATEGORY = loader('./graphql/updateCategory.graphql');
-const DELETE_CATEGORY = loader('./graphql/deleteCategory.graphql');
+import {CREATE_CATEGORY} from './graphql/CreateCategory';
+import {UPDATE_CATEGORY} from './graphql/UpdateCategory';
+import {DELETE_CATEGORY} from './graphql/DeleteCategory';
 
 export function CategoryModal({
   categoryModal,

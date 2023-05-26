@@ -2,9 +2,12 @@ const express = require('express');
 const {graphqlHTTP} = require('express-graphql');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const cors = require('cors');
 
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const schema = require('./graphql/schema');
 const connectDB = require('./config/database');
@@ -15,6 +18,20 @@ const PORT = process.env.PORT || 5050;
 const app = express();
 
 connectDB();
+
+app.set('trust proxy', 1);
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    },
+  }),
+);
 
 app.use(
   cors({

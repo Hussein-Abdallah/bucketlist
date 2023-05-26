@@ -1,15 +1,13 @@
 import {useState} from 'react';
-import {AppForm, DeleteModal, FormField, SubmitButton} from 'components/Shared';
 import {Modal} from 'react-bootstrap';
 import {useParams} from 'react-router-dom';
-import {WISH_MODAL, wishValidationSchema} from '../../utilities';
-
-import {loader} from 'graphql.macro';
 import {useMutation} from '@apollo/client';
 
-const CREATE_WISH = loader('./graphql/CreateWish.graphql');
-const UPDATE_WISH = loader('./graphql/UpdateWish.graphql');
-const DELETE_WISH = loader('./graphql/DeleteWish.graphql');
+import {WISH_MODAL, wishValidationSchema} from '../../utilities';
+import {AppForm, DeleteModal, FormField, SubmitButton} from 'components/Shared';
+import {CREATE_WISH} from './graphql/CreateWish';
+import {UPDATE_WISH} from './graphql/UpdateWish';
+import {DELETE_WISH} from './graphql/DeleteWish';
 
 export function WishModal({wishModalOpen, setWishModalOpen, wishDetails}) {
   const [error, setError] = useState(null);

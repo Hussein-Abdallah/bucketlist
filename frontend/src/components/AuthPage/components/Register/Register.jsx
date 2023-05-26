@@ -1,16 +1,16 @@
 import {useState, useRef} from 'react';
 import {Button, Fade} from 'react-bootstrap';
 import classNames from 'classnames';
-import {loader} from 'graphql.macro';
 import {useMutation} from '@apollo/client';
 import {useNavigate} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 
 import styles from './Register.module.css';
+
 import {useAuth} from 'foundation';
 import {AppForm, FormField, SubmitButton} from 'components/Shared';
-const {validationSchema} = require('./utilities');
-const CREATE_USER = loader('./graphql/createUser.graphql');
+import {validationSchema} from './utilities';
+import {CREATE_USER} from './graphql/CreateUser';
 
 export const Register = ({isNewUser, setIsNewUser}) => {
   const [error, setError] = useState(null);
@@ -25,6 +25,8 @@ export const Register = ({isNewUser, setIsNewUser}) => {
       setCookie('token', data.createUser.token, {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30,
+        sameSite: 'none',
+        secure: true,
       });
       navigate('/');
     },

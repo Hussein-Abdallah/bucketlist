@@ -1,14 +1,12 @@
 import {useEffect, useState} from 'react';
 import {ProgressBar, Table} from 'react-bootstrap';
+import {useQuery} from '@apollo/client';
 
 import styles from './WishesList.module.css';
 import {WishItem, WishModal} from './components';
 import {WISH_MODAL} from './utilities';
-import {useQuery} from '@apollo/client';
-import {loader} from 'graphql.macro';
 import {LoadingSpinner, ErrorContainer} from 'components/Shared';
-
-const GET_WISHES = loader('./graphql/GetWishes.graphql');
+import {GET_WISHES} from './graphql/GetWishes';
 
 export function WishesList({categoryId}) {
   const [wishStatus, setWishStatus] = useState({

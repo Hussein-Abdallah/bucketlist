@@ -54,7 +54,7 @@ export function Header() {
                 </>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu align="end">
+              <Dropdown.Menu align="end" className="position-absolute">
                 <Dropdown.Item onClick={() => console.log('Manage profile')}>
                   Manage profile
                 </Dropdown.Item>
