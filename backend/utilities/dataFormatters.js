@@ -19,7 +19,6 @@ const transformCategory = (category) => {
     status: true,
   });
 
-  console.log('category', category.wishes);
   return {
     ...category._doc,
     id: category._doc._id,
