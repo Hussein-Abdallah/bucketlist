@@ -1,26 +1,29 @@
 # Backend Server for Bucket List App
 
-This project is being created with the following stack
+This project is being created with the following stack:
 
-- NodeJs
-- Express Js
+- Node.js
+- Express.js
 - Express-GraphQL
-- Mongo Database
+- MongoDB
 
-## Starting the server
+## Starting the Server
 
-### Install
+### Installation
 
-Open the project folder in a terminal, then install the dependencies of the backend server
+1. Open the project folder in a terminal.
+2. Navigate to the backend folder.
+3. Install the dependencies of the backend server by running the following command:
 
+```bash
+$ cd backend
+$ npm install
 ```
-    $ cd backend
-    $ npm install
-```
 
-### Setup Environment file
+### Setup Environment File
 
-In the backend folder, create `.env` file and set the following variables
+1. In the backend folder, create a `.env` file.
+2. Set the following variables in the `.env` file:
 
 ```
 NODE_ENV='development'
@@ -29,12 +32,13 @@ MONGO_USER=''
 MONGO_PASSWORD=''
 MONGO_DB=''
 JWT_SECRET_KEY=''
+CLIENT_URL='http://localhost:3000'
 ```
 
-### Start the server
+### Start the Server
 
-In the terminal, while you are in the `backend` folder, run:
+1. In the terminal, while you are in the `backend` folder, run the following command:
 
-```
+```bash
     $ npm run dev
 ```
